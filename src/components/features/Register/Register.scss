@@ -1,0 +1,48 @@
+@use '../../../utility-styles' as *;
+
+.register {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20rem;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4rem;
+    background-color: var(--background-light);
+    padding: 3.2rem;
+    border-radius: 1.5rem;
+  }
+
+  &__title {
+    font-size: 2.4rem;
+    font-weight: 700;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    color: var(--white-text);
+  }
+
+  &__input {
+    width: 37.2rem;
+    padding: 1.2rem 2.4rem;
+    border: none;
+    border-radius: 1rem;
+    font-family: inherit;
+  }
+
+  &__btn {
+    @extend %btn;
+    padding: 1.2rem 2.4rem;
+    background-color: var(--button-blue);
+    color: var(--white-text);
+    border-radius: 1rem;
+
+    &:hover {
+      background-color: var(--button-blue-hover);
+    }
+  }
+}
