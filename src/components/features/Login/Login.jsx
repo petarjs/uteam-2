@@ -1,18 +1,12 @@
-// import { useEffect } from 'react';
-
-import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-import { REGEXFOREMAIL as regexEmail } from '../../../config/config.jsx';
+import { REGEXFOREMAIL as regexEmail } from '../../../config/config.js';
 import useInput from '../../../hooks/useInput.jsx';
 import { useAuthContext } from '../../../stores/AuthContext.jsx';
-// eslint-disable-next-line no-unused-vars
 import AsideMenu from '../../Layout/AsideMenu//AsideMenu.jsx';
-// import TopBar from '../../Layout/Topbar/TopBar.jsx';
 
 // Import styles:
 import './Login.scss';
-// import LoginForm from './LoginForm.jsx';
 
 // Helpers:
 const isEmail = (email) => regexEmail.test(email);
@@ -20,9 +14,8 @@ const isPassword = (password) =>
   password.trim() !== '' && password.length >= 6 && password.length <= 20;
 
 const Login = () => {
-  const { user, login } = useAuthContext();
   // eslint-disable-next-line no-unused-vars
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { currentUser, isUserLoggedIn, handleLogin } = useAuthContext();
 
   const {
     value: enteredEmail,
@@ -59,91 +52,20 @@ const Login = () => {
     : 'login__form-control';
 
   // Handle Submit:
-
   const handleLoginSubbmission = async (e) => {
-    await login(e, enteredEmail, enteredPassword, resetEmailInput, resetPasswordInput);
+    await handleLogin(e, enteredEmail, enteredPassword);
+    resetEmailInput('');
+    resetPasswordInput('');
   };
 
-  console.log(user);
-
-  // const handleLoginSubbmission = async (e) => {
-  //   e.preventDefault();
-
-  //   const user = { enteredEmail, enteredPassword };
-
-  //   try {
-  //     const response = await axios.post(API_ENDPOINT, {
-  //       user,
-  //     });
-
-  //     const loginData = await response.data;
-  //     console.log(loginData, '🚀🤘');
-  //     setUser(loginData);
-  //     localStorage.setItem('user', loginData);
-  //   } catch (err) {
-  //     console.error(`${err.message}, 💥🤯`);
-  //     // n
-  //   } finally {
-  //     resetEmailInput();
-  //     resetPasswordInput();
-  //   }
-  // };
-
-  // Check if user log in:
-  // useEffect(() => {
-  //   const loggedInUser = localStorage.getItem('user');
-  //   if (loggedInUser) {
-  //     const foundUser = loggedInUser;
-  //     console.log(foundUser);
-  //     console.log(user);
-  //     // setUser(foundUser);
-  //   }
-  // }, [user]);
-
-  // console.log(user);
-  // if (user) {
-  //   // return <MyProfile />
-  //   return <p>User is loggged in</p>;
-  // }
-
-  // if (isLoggedIn) {
-  //   // return <MyProfile />
-  //   return <p>User is loggged in</p>;
-  // }
-
-  useEffect(() => {
-    const loggedInUser = localStorage.getItem('user');
-    if (loggedInUser) {
-      const foundUser = loggedInUser;
-      console.log(foundUser);
-      setIsLoggedIn(true);
-    }
-  }, []);
-
-  // if (isLoggedIn) {
-  //   return <AsideMenu />;
-  // }
+  if (isUserLoggedIn) {
+    return <AsideMenu isLogged={isUserLoggedIn} />;
+  }
 
   return (
     <section className="login">
       <div className="login__content">
         <h2 className="login__title">uTeam - Login</h2>
-
-        {/* <LoginForm
-          props={
-            (handleLoginSubbmission,
-            emailInputClasses,
-            handleEmailInputChange,
-            handleEmailInputBlur,
-            enteredEmail,
-            emailInputHasError,
-            passwordInputClasses,
-            handlePasswordInputChange,
-            handlePasswordInputBlur,
-            passwordInputHasError,
-            formIsValid)
-          }
-        /> */}
         <form onSubmit={(target) => handleLoginSubbmission(target)}>
           <div className="login__inputs-box">
             <div className={emailInputClasses}>

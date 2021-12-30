@@ -19,15 +19,13 @@ import { AuthContextProvider } from './stores/AuthContext.jsx';
 function App() {
   // eslint-disable-next-line no-unused-vars
   // const { isLoggedIn } = useAuthContext();
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
     <BrowserRouter>
       <AuthContextProvider>
-        {/* {isLoggedIn && <TopBar />}
-        {isLoggedIn && <AsideMenu />} */}
         {<TopBar />}
-        <AsideMenu isLogged={isLoggedIn} />
+        {/* <AsideMenu isLogged={isLoggedIn} /> */}
 
         <main className="section-main">
           <Routes>

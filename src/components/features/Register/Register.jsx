@@ -1,30 +1,62 @@
-// import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
+
+import { API_ENDPOINT } from '../../../config/config.js';
 
 import './Register.scss';
 
 const Registration = () => {
+  const [userData, setUserData] = useState({
+    identifier: '',
+    password: '',
+    file: [],
+  });
+
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    // eslint-disable-next-line no-unused-vars
     reset,
     trigger,
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
-    reset();
+  const handleSubmitRegistration = (data) => {
+    setUserData(data);
+
+    const handleRegistration = async () => {
+      try {
+        console.log(data, 'async');
+        const response = await axios.post(`${API_ENDPOINT}register`, data);
+        localStorage.setItem('userJwt', response.data.jwt);
+        navigate('/my-profile');
+      } catch (err) {
+        console.log(err.message);
+      } finally {
+        //reset();
+      }
+    };
+
+    handleRegistration();
   };
-  console.log(errors);
+
+  console.log(userData);
+
   return (
     <div className="register">
       <div className="register__content">
         <h2 className="register__title">uTeam - Register</h2>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit((data) => handleSubmitRegistration(data))}>
           <div className="register__field">
-            <label htmlFor="name">Name:</label>
+            <label className="register__label" htmlFor="name">
+              Name:
+            </label>
             <input
               type="text"
               id="name"
@@ -39,7 +71,9 @@ const Registration = () => {
           {errors.name && <p className="register__error-message">{errors.name.message}</p>}
 
           <div className="register__field">
-            <label htmlFor="email">Email:</label>
+            <label className="register__label" htmlFor="email">
+              Email:
+            </label>
             <input
               type="email"
               id="email"
@@ -60,7 +94,9 @@ const Registration = () => {
           {errors.email && <p className="register__error-message">{errors.email.message}</p>}
 
           <div className="register__field">
-            <label htmlFor="password">Password:</label>
+            <label className="register__label" htmlFor="password">
+              Password:
+            </label>
             <input
               className={`register__input ${errors.password && 'invalid'}`}
               type="password"
@@ -85,7 +121,9 @@ const Registration = () => {
           {errors.password && <p className="register__error-message">{errors.password.message}</p>}
 
           <div className="register__field">
-            <label htmlFor="upload_file">Profile Photo</label>
+            <label className="register__label" htmlFor="upload_file">
+              Profile Photo
+            </label>
             <input
               type="file"
               id="upload_file"
@@ -95,145 +133,16 @@ const Registration = () => {
             />
           </div>
 
-          <p></p>
-
-          <span> Already have an account? </span>
-          <input type="submit" value="submit" className="register__btn" />
+          <div className="register__btn-conteiner">
+            <Link to="/login">
+              <span className="register__paragraph"> Already have an account? </span>
+            </Link>
+            <input type="submit" value="submit" className="register__btn" />
+          </div>
         </form>
       </div>
     </div>
   );
 };
-
-// const RegistrationForm = () => {
-//   const initialValues = { name: '', email: '', password: '', password2: '', file: '' };
-//   const [formValues, setFormValue] = useState(initialValues);
-//   const [formErrors, setFormErrors] = useState({});
-//   const [isSubmit, setIsSubmit] = useState(false);
-
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormValue({ ...formValues, [name]: value });
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     setFormErrors(validate(formValues));
-//     setIsSubmit(true);
-//   };
-
-//   useEffect(() => {
-//     // console.log(formErrors);
-//     if (Object.keys(formErrors).length === 0 && isSubmit) {
-//       console.log(formValues);
-//     }
-//   }, [formErrors]);
-
-//   const validate = (values) => {
-//     const errors = {};
-//     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-//     if (!values.username) {
-//       errors.name = 'Name is required!';
-//     }
-//     if (!values.email) {
-//       errors.email = 'Email is required!';
-//     } else if (!regex.test(values.email)) {
-//       errors.email = 'This is not a valid email format!';
-//     }
-//     if (!values.password) {
-//       errors.password = 'Password is required';
-//     } else if (values.password.length < 4) {
-//       errors.password = 'Password must be more than 4 characters';
-//     } else if (values.password.length > 10) {
-//       errors.password = 'Password cannot exceed more than 10 characters';
-//     }
-//     if (values.password !== values.password2) {
-//       errors.password2 = 'Passwords doesn`t match';
-//     }
-//     if (values.file === '') {
-//       errors.file = 'You need to upload the photo';
-//     }
-//     return errors;
-//   };
-
-//   return (
-//     <div className="register">
-//       <div className="register__content">
-//         <h2 className="register__title">uTeam - Register</h2>
-
-//         <form onSubmit={handleSubmit}>
-//           <div className="register__field">
-//             <label htmlFor="name">Name:</label>
-//             <input
-//               type="text"
-//               id="name"
-//               name="name"
-//               placeholder="Name"
-//               value={formValues.name}
-//               onChange={handleChange}
-//             />
-//           </div>
-//           <p>{formErrors.name}</p>
-
-//           <div className="register__field">
-//             <label htmlFor="email">Email:</label>
-//             <input
-//               type="email"
-//               id="email"
-//               name="email"
-//               placeholder="Email"
-//               value={formValues.email}
-//               onChange={handleChange}
-//             />
-//           </div>
-//           <p>{formErrors.email}</p>
-
-//           <div className="register__field">
-//             <label htmlFor="password">Password:</label>
-//             <input
-//               type="password"
-//               id="password"
-//               name="password"
-//               placeholder="Password"
-//               value={formValues.password}
-//               onChange={handleChange}
-//             />
-//           </div>
-//           <p>{formErrors.password}</p>
-//           <div className="register__field">
-//             <label htmlFor="password2">Repeat Password:</label>
-//             <input
-//               type="password"
-//               id="password2"
-//               name="password2"
-//               placeholder="Repeat password"
-//               value={formValues.password2}
-//               onChange={handleChange}
-//             />
-//           </div>
-//           <p>{formErrors.password2}</p>
-
-//           <div className="register__field">
-//             <label htmlFor="upload_file">Profile Photo</label>
-//             <input
-//               type="file"
-//               id="upload_file"
-//               name="file"
-//               accept=".png, .jpg, .jpeg"
-//               placeholder="Upload File"
-//               value={formValues.file}
-//               onChange={handleChange}
-//             />
-//           </div>
-
-//           <p>{formErrors.file}</p>
-
-//           <span> Already have an account? </span>
-//           <button> Submit</button>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// };
 
 export default Registration;
