@@ -1,21 +1,19 @@
+/* eslint-disable no-unused-vars */
+import clsx from 'clsx';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { REGEXFOREMAIL as regexEmail } from '../../../config/config.js';
-import useInput from '../../../hooks/useInput.jsx';
-import { useAuthContext } from '../../../stores/AuthContext.jsx';
-import AsideMenu from '../../Layout/AsideMenu//AsideMenu.jsx';
+import AsideMenu from 'components/Layout/AsideMenu/AsideMenu';
+import { useAuthContext } from 'context/AuthContext.jsx';
+import useInput from 'hooks/useInput.jsx';
+import { isEmail, isPassword } from 'utils/validation';
 
 // Import styles:
 import './Login.scss';
 
-// Helpers:
-const isEmail = (email) => regexEmail.test(email);
-const isPassword = (password) =>
-  password.trim() !== '' && password.length >= 6 && password.length <= 20;
-
 const Login = () => {
-  // eslint-disable-next-line no-unused-vars
   const { currentUser, isUserLoggedIn, handleLogin } = useAuthContext();
+  const [formIsValid, setFormIsValid] = useState(false);
 
   const {
     value: enteredEmail,
@@ -35,27 +33,22 @@ const Login = () => {
     reset: resetPasswordInput,
   } = useInput(isPassword);
 
-  let formIsValid = false;
-
-  // Check for submit button:
-  if (enteredEmailIsValid && enteredPasswordIsValid) {
-    formIsValid = true;
+  if (enteredEmailIsValid && enteredPasswordIsValid && !formIsValid) {
+    setFormIsValid(true);
+  } else if ((!enteredEmailIsValid || !enteredPasswordIsValid) && formIsValid) {
+    setFormIsValid(false);
   }
 
   // Check and set classes:
-  const emailInputClasses = emailInputHasError
-    ? 'login__form-control invalid'
-    : 'login__form-control';
-
-  const passwordInputClasses = passwordInputHasError
-    ? 'login__form-control invalid'
-    : 'login__form-control';
+  const emailInputClasses = clsx('login__form-control', emailInputHasError && 'invalid');
+  const passwordInputClasses = clsx('login__form-control', passwordInputHasError && 'invalid');
 
   // Handle Submit:
   const handleLoginSubbmission = async (e) => {
-    await handleLogin(e, enteredEmail, enteredPassword);
-    resetEmailInput('');
-    resetPasswordInput('');
+    e.preventDefault();
+    await handleLogin(enteredEmail, enteredPassword);
+    resetEmailInput();
+    resetPasswordInput();
   };
 
   if (isUserLoggedIn) {
@@ -66,7 +59,7 @@ const Login = () => {
     <section className="login">
       <div className="login__content">
         <h2 className="login__title">uTeam - Login</h2>
-        <form onSubmit={(target) => handleLoginSubbmission(target)}>
+        <form onSubmit={handleLoginSubbmission}>
           <div className="login__inputs-box">
             <div className={emailInputClasses}>
               <label className="login__input-label" htmlFor="email">
@@ -92,6 +85,7 @@ const Login = () => {
                 className="login__input"
                 onChange={(target) => handlePasswordInputChange(target)}
                 onBlur={handlePasswordInputBlur}
+                value={enteredPassword}
                 placeholder="length 6-20"
               />
               {passwordInputHasError && (

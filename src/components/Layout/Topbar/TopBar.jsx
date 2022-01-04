@@ -1,44 +1,21 @@
-import { HStack, Spacer, Icon, Heading, Button, Flex, Text } from '@chakra-ui/react';
+import { HStack, Spacer, Icon, Heading, Flex } from '@chakra-ui/react';
 import PropTypes from 'prop-types'; // ES6
 import { FaTeamspeak } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
 
-function TopBar({ isLogged, setIsLogged }) {
-  let links;
+import TopBarLink from './TopBarLink';
 
-  const handleLogout = () => {
+import { useAuthContext } from 'context/AuthContext.jsx';
+
+function TopBar({ setIsLogged }) {
+  const { handleLogout, isUserLoggedIn } = useAuthContext();
+  const guestLinks = ['login', 'register'];
+  const userLinks = ['logout', 'my-profile'];
+  const links = isUserLoggedIn ? userLinks : guestLinks;
+
+  const navBarHandleLogout = () => {
+    handleLogout();
     setIsLogged(false);
   };
-
-  const makeLinkButton = (el, index) => {
-    return (
-      <Link
-        key={index}
-        to={`/${el}`}
-        onClick={() => {
-          if (el === 'logout') handleLogout();
-        }}
-      >
-        <Button
-          m=".2rem 0 .2rem 1rem"
-          bg="color.buttonBlue"
-          color="color.whiteText"
-          _hover={{
-            background: 'color.buttonBlueHover',
-          }}
-          mr="1rem"
-        >
-          <Text fontSize="2xl">{el}</Text>
-        </Button>
-      </Link>
-    );
-  };
-
-  if (!isLogged) {
-    links = ['login', 'register'].map((el, i) => makeLinkButton(el, i));
-  } else {
-    links = ['logout', 'my-profile'].map((el, i) => makeLinkButton(el, i));
-  }
 
   return (
     <HStack
@@ -60,7 +37,9 @@ function TopBar({ isLogged, setIsLogged }) {
       <Spacer />
       <HStack>
         <Flex alignItems="flex-end" flexDir={{ base: 'column', smmd: 'row' }}>
-          {links}
+          {links.map((linkText, index) => (
+            <TopBarLink text={linkText} key={index} handleLogout={navBarHandleLogout} />
+          ))}
         </Flex>
       </HStack>
     </HStack>
@@ -68,7 +47,7 @@ function TopBar({ isLogged, setIsLogged }) {
 }
 
 TopBar.propTypes = {
-  isLogged: PropTypes.bool,
+  isUserLoggedIn: PropTypes.bool,
 };
 
 export default TopBar;

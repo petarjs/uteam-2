@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 import { API_ENDPOINT } from '../config/config.js';
 
 const AuthContext = createContext({
-  currentUser: { indetifier: '', password: '' },
+  currentUser: { identifier: '', password: '' },
   isUserLoggedIn: false,
   handleLogin: () => {},
   handleLogout: () => {},
@@ -18,8 +18,7 @@ export const AuthContextProvider = ({ children }) => {
   const [isUserLoggedIn, setUserLoggedIn] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = async (e, identifier, password) => {
-    e.preventDefault();
+  const handleLogin = async (identifier, password) => {
     const user = { identifier, password };
 
     try {
@@ -38,6 +37,7 @@ export const AuthContextProvider = ({ children }) => {
   };
 
   const handleLogout = () => {
+    console.log('User LOGGED OUT!!');
     setCurrentUser(null);
     setUserLoggedIn(false);
     localStorage.clear();
@@ -47,7 +47,7 @@ export const AuthContextProvider = ({ children }) => {
     const loggedInUser = localStorage.getItem('userJwt');
     if (loggedInUser) {
       const foundUser = loggedInUser;
-      console.log(foundUser);
+      console.log('FOUND USER jwt!!!', foundUser);
       setUserLoggedIn(true);
     }
   }, []);
