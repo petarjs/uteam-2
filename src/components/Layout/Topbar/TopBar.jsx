@@ -1,21 +1,34 @@
 import { HStack, Spacer, Icon, Heading, Flex } from '@chakra-ui/react';
-import PropTypes from 'prop-types'; // ES6
 import { FaTeamspeak } from 'react-icons/fa';
 
 import TopBarLink from './TopBarLink';
 
 import { useAuthContext } from 'context/AuthContext.jsx';
 
-function TopBar({ setIsLogged }) {
-  const { handleLogout, isUserLoggedIn } = useAuthContext();
-  const guestLinks = ['login', 'register'];
-  const userLinks = ['logout', 'my-profile'];
+function TopBar() {
+  const { isUserLoggedIn, handleLogout } = useAuthContext();
+  const guestLinks = [
+    {
+      text: 'Login',
+      href: '/login',
+    },
+    {
+      text: 'Register',
+      href: '/register',
+    },
+  ];
+  const userLinks = [
+    {
+      text: 'Logout',
+      href: '/logout',
+      onClick: () => handleLogout(),
+    },
+    {
+      text: 'My Profile',
+      href: '/my-profile',
+    },
+  ];
   const links = isUserLoggedIn ? userLinks : guestLinks;
-
-  const navBarHandleLogout = () => {
-    handleLogout();
-    setIsLogged(false);
-  };
 
   return (
     <HStack
@@ -37,17 +50,18 @@ function TopBar({ setIsLogged }) {
       <Spacer />
       <HStack>
         <Flex alignItems="flex-end" flexDir={{ base: 'column', smmd: 'row' }}>
-          {links.map((linkText, index) => (
-            <TopBarLink text={linkText} key={index} handleLogout={navBarHandleLogout} />
+          {links.map((linkObj, index) => (
+            <TopBarLink
+              text={linkObj.text}
+              href={linkObj.href}
+              onClick={linkObj.onClick}
+              key={index}
+            />
           ))}
         </Flex>
       </HStack>
     </HStack>
   );
 }
-
-TopBar.propTypes = {
-  isUserLoggedIn: PropTypes.bool,
-};
 
 export default TopBar;

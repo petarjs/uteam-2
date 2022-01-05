@@ -1,21 +1,18 @@
-import axios from 'axios';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 
-import { API_ENDPOINT } from '../../../config/config.js';
+import { useAuthContext } from 'context/AuthContext.jsx';
 
 import './Register.scss';
 
 const Registration = () => {
+  const { handleRegister } = useAuthContext();
   const [userData, setUserData] = useState({
     identifier: '',
     password: '',
     file: [],
   });
-
-  const navigate = useNavigate();
 
   const {
     register,
@@ -26,23 +23,9 @@ const Registration = () => {
     trigger,
   } = useForm();
 
-  const handleSubmitRegistration = (data) => {
+  const handleSubmitRegistration = async (data) => {
+    await handleRegister(data);
     setUserData(data);
-
-    const handleRegistration = async () => {
-      try {
-        console.log(data, 'async');
-        const response = await axios.post(`${API_ENDPOINT}register`, data);
-        localStorage.setItem('userJwt', response.data.jwt);
-        navigate('/my-profile');
-      } catch (err) {
-        console.log(err.message);
-      } finally {
-        //reset();
-      }
-    };
-
-    handleRegistration();
   };
 
   console.log(userData);
@@ -121,16 +104,15 @@ const Registration = () => {
           {errors.password && <p className="register__error-message">{errors.password.message}</p>}
 
           <div className="register__field">
-            <label className="register__label" htmlFor="upload_file">
-              Profile Photo
-            </label>
+            <label htmlFor="upload_file">Profile Photo</label>
             <input
               type="file"
               id="upload_file"
               accept=".png, .jpg, .jpeg"
               placeholder="Upload File"
-              {...register('file')}
+              {...register('image', { required: 'Image is required' })}
             />
+            {errors.image && <p className="register__error-message">{errors.image.message}</p>}
           </div>
 
           <div className="register__btn-conteiner">

@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import AsideMenu from 'components/Layout/AsideMenu/AsideMenu';
 import { useAuthContext } from 'context/AuthContext.jsx';
 import useInput from 'hooks/useInput.jsx';
 import { isEmail, isPassword } from 'utils/validation';
@@ -50,10 +49,6 @@ const Login = () => {
     resetEmailInput();
     resetPasswordInput();
   };
-
-  if (isUserLoggedIn) {
-    return <AsideMenu isLogged={isUserLoggedIn} />;
-  }
 
   return (
     <section className="login">

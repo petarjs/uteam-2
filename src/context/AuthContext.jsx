@@ -1,8 +1,7 @@
-import axios from 'axios';
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
-import { API_ENDPOINT } from '../config/config.js';
+import { login, register } from 'services/auth';
 
 const AuthContext = createContext({
   currentUser: { identifier: '', password: '' },
@@ -18,22 +17,21 @@ export const AuthContextProvider = ({ children }) => {
   const [isUserLoggedIn, setUserLoggedIn] = useState(false);
   const navigate = useNavigate();
 
+  const loginUser = (userData) => {
+    setCurrentUser(userData.user);
+    localStorage.setItem('userJwt', userData.jwt);
+    setUserLoggedIn(true);
+    navigate('/pending-approval');
+  };
+
+  const handleRegister = async (data) => {
+    const userData = await register(data);
+    loginUser(userData);
+  };
+
   const handleLogin = async (identifier, password) => {
-    const user = { identifier, password };
-
-    try {
-      const response = await axios.post(API_ENDPOINT, user);
-      // console.log(response.data.user, '🚀🤘USER');
-      // console.log('token', response.data.jwt);
-
-      setCurrentUser(response.data.user);
-
-      localStorage.setItem('userJwt', response.data.jwt);
-      setUserLoggedIn(true);
-      navigate('/my-profile');
-    } catch (err) {
-      console.error(`${err.message}, 💥🤯`);
-    }
+    const userData = await login(identifier, password);
+    loginUser(userData);
   };
 
   const handleLogout = () => {
@@ -57,6 +55,7 @@ export const AuthContextProvider = ({ children }) => {
     isUserLoggedIn,
     handleLogin,
     handleLogout,
+    handleRegister,
   };
 
   return <AuthContext.Provider value={authContext}>{children}</AuthContext.Provider>;

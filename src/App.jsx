@@ -5,7 +5,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.scss';
 
 import Login from './components/features/Login/Login.jsx';
-import Logout from './components/features/Logout/Logout.jsx';
 import PendingApproval from './components/features/PendingApproval/PendingApproval.jsx';
 import Register from './components/features/Register/Register.jsx';
 import AsideMenu from './components/Layout/AsideMenu/AsideMenu.jsx';
@@ -31,7 +30,7 @@ function App() {
         <AsideMenu />
         <MainContent>
           <Routes>
-            <Route path="/" element={<Login />} />
+            <Route path="/" element={<PendingApproval />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/logout" element={<Login />} />

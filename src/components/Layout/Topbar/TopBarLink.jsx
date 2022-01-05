@@ -1,15 +1,9 @@
 import { Button, Text } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 
-function TopBarLink({ handleLogout, text, index }) {
+function TopBarLink({ text, href, onClick }) {
   return (
-    <Link
-      key={index}
-      to={`/${text}`}
-      onClick={() => {
-        if (text === 'logout') handleLogout();
-      }}
-    >
+    <Link to={href ?? '#'} onClick={onClick ?? console.log()}>
       <Button
         m=".2rem 0 .2rem 1rem"
         bg="color.buttonBlue"
