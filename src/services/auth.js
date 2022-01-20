@@ -7,6 +7,8 @@ export const login = async (identifier, password) => {
     const response = await axiosInstance.post('/api/auth/local/', user);
     console.log(response.data.user, '🚀🤘USER');
     console.log('token', response.data.jwt);
+    // console.log(response.data.user, '🚀🤘USER');
+    // console.log('token', response.data.jwt);
 
     return response.data;
   } catch (err) {

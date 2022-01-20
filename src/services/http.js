@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-import { API_ENDPOINT } from 'config/config.js';
+import { API_URL } from 'config/config.js';
 
 const axiosInstance = axios.create({
-  baseURL: API_ENDPOINT,
+  baseURL: API_URL,
   timeout: 5000,
 });
 

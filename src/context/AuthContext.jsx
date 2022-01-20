@@ -5,7 +5,7 @@ import { login, register } from 'services/auth';
 import { getUserStats, getProfileImage } from 'services/getUser';
 
 const AuthContext = createContext({
-  currentUser: { identifier: '', password: '' },
+  currentUser: {},
   isUserLoggedIn: false,
   handleLogin: () => {},
   handleLogout: () => {},
@@ -40,6 +40,7 @@ export const AuthContextProvider = ({ children }) => {
   const handleRegister = async (data) => {
     const userData = await register(data);
     loginUser(userData);
+    return userData;
   };
 
   const handleLogin = async (identifier, password) => {
