@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 import { login, register } from 'services/auth';
 
 const AuthContext = createContext({
-  currentUser: { identifier: '', password: '' },
+  currentUser: {},
   isUserLoggedIn: false,
   handleLogin: () => {},
   handleLogout: () => {},
@@ -27,6 +27,7 @@ export const AuthContextProvider = ({ children }) => {
   const handleRegister = async (data) => {
     const userData = await register(data);
     loginUser(userData);
+    return userData;
   };
 
   const handleLogin = async (identifier, password) => {

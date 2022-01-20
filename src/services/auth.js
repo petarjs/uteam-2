@@ -4,7 +4,7 @@ export const login = async (identifier, password) => {
   const user = { identifier, password };
 
   try {
-    const response = await axiosInstance.post('auth/local/', user);
+    const response = await axiosInstance.post('auth/local', user);
     // console.log(response.data.user, '🚀🤘USER');
     // console.log('token', response.data.jwt);
 

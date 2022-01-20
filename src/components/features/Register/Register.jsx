@@ -1,18 +1,21 @@
-import { useState } from 'react';
+// import axios from 'axios';
+// import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
 import { useAuthContext } from 'context/AuthContext.jsx';
-
 import './Register.scss';
+import postUserData from 'services/postUserData';
 
 const Registration = () => {
-  const { handleRegister } = useAuthContext();
-  const [userData, setUserData] = useState({
-    identifier: '',
-    password: '',
-    file: [],
-  });
+  // eslint-disable-next-line no-unused-vars
+  const { handleRegister, currentUser } = useAuthContext();
+  // const [userData, setUserData] = useState({
+  //   name: '',
+  //   email: '',
+  //   password: '',
+  //   image: null,
+  // });
 
   const {
     register,
@@ -24,11 +27,17 @@ const Registration = () => {
   } = useForm();
 
   const handleSubmitRegistration = async (data) => {
-    await handleRegister(data);
-    setUserData(data);
-  };
+    const {
+      user: { id },
+    } = await handleRegister(data);
 
-  console.log(userData);
+    console.log(id, '👋');
+
+    const userImg = new FormData();
+    userImg.append('userImg', data.image[0]);
+
+    await postUserData(userImg, data, id);
+  };
 
   return (
     <div className="register">
@@ -116,7 +125,7 @@ const Registration = () => {
           </div>
 
           <div className="register__btn-conteiner">
-            <Link to="/login">
+            <Link to="/">
               <span className="register__paragraph"> Already have an account? </span>
             </Link>
             <input type="submit" value="submit" className="register__btn" />
