@@ -20,7 +20,7 @@ function TopBar() {
   const userLinks = [
     {
       text: 'Logout',
-      href: '/logout',
+      href: '/',
       onClick: () => handleLogout(),
     },
     {
