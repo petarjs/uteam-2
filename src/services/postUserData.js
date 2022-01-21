@@ -3,13 +3,13 @@ import axiosInstance from './http';
 const postUserData = async (userImg, data, userId) => {
   try {
     const response = await Promise.all([
-      axiosInstance.post('upload', userImg),
-      axiosInstance.post('companies', {
+      axiosInstance.post('/api/upload', userImg),
+      axiosInstance.post('/api/companies', {
         data: {
-          name: `${data.name}'s Company`,
+          name: `${data.username}'s Company`,
         },
       }),
-      axiosInstance.post('profiles', {
+      axiosInstance.post('/api/profiles', {
         data: {
           name: data.name,
           profilePhoto: userImg,

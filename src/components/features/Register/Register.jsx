@@ -27,6 +27,8 @@ const Registration = () => {
   } = useForm();
 
   const handleSubmitRegistration = async (data) => {
+    data.username = data.name;
+    delete data.name;
     const {
       user: { id },
     } = await handleRegister(data);
