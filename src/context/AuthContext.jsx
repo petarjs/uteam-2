@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useCallback, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
 import { login, register } from 'services/auth';
@@ -18,24 +18,27 @@ export const AuthContextProvider = ({ children }) => {
   const [isUserLoggedIn, setUserLoggedIn] = useState(false);
   const navigate = useNavigate();
 
-  const loginUser = async (userData) => {
-    localStorage.setItem('userJwt', userData.jwt);
-    setUserLoggedIn(true);
-    navigate('/pending-approval');
-    const user = await getUserStats();
-    const userImage = await getProfileImage(user.id);
-    user['imagePathURL'] = userImage[0];
-    user['imageName'] = userImage[1];
-    setCurrentUser(user);
-    console.log(
-      'USE DATARRRR U LOGINUSER JE::: ',
-      userData,
-      userData.jwt,
-      user,
-      ' slika je: ?? ',
-      userImage
-    );
-  };
+  const loginUser = useCallback(
+    async (userData) => {
+      localStorage.setItem('userJwt', userData.jwt);
+      setUserLoggedIn(true);
+      navigate('/pending-approval');
+      const user = await getUserStats();
+      const userImage = await getProfileImage(user.id);
+      user['imagePathURL'] = userImage[0];
+      user['imageName'] = userImage[1];
+      setCurrentUser(user);
+      console.log(
+        'USE DATARRRR U LOGINUSER JE::: ',
+        userData,
+        userData.jwt,
+        user,
+        ' slika je: ?? ',
+        userImage
+      );
+    },
+    [navigate]
+  );
 
   const handleRegister = async (data) => {
     const userData = await register(data);
@@ -63,7 +66,7 @@ export const AuthContextProvider = ({ children }) => {
       //setUserLoggedIn(true);
       loginUser({ jwt: foundUser });
     }
-  }, []);
+  }, [loginUser]);
 
   const authContext = {
     currentUser,
