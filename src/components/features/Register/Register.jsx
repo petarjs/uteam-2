@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 
 import { useAuthContext } from 'context/AuthContext.jsx';
 import './Register.scss';
-import postUserData from 'services/postUserData';
 
 const Registration = () => {
   // eslint-disable-next-line no-unused-vars
@@ -27,18 +26,9 @@ const Registration = () => {
   } = useForm();
 
   const handleSubmitRegistration = async (data) => {
-    data.username = data.name;
-    delete data.name;
-    const {
-      user: { id },
-    } = await handleRegister(data);
-
-    console.log(id, '👋');
-
-    const userImg = new FormData();
-    userImg.append('userImg', data.image[0]);
-
-    await postUserData(userImg, data, id);
+    const uploadFileData = new FormData();
+    uploadFileData.append('files', data.image[0]);
+    await handleRegister(data, uploadFileData);
   };
 
   return (
@@ -56,7 +46,7 @@ const Registration = () => {
               id="name"
               className={`register__input ${errors.name && 'invalid'}`}
               placeholder="Name"
-              {...register('name', { required: 'Name is required' })}
+              {...register('username', { required: 'Name is required' })}
               onKeyUp={() => {
                 trigger('name');
               }}

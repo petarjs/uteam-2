@@ -8,11 +8,11 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(function (req) {
-  console.log(`${req.method} ${req.url}`);
+  //console.log(`${req.method} ${req.url}`);
+  //console.log('add jwt:::???', jwt);
   const jwt = localStorage.getItem('userJwt');
-  console.log('WTF add jwt:::???', jwt);
   if (jwt) {
-    console.log('dodaj jwt????????');
+    //console.log('dodaj jwt????????');
     req.headers.Authorization = 'Bearer ' + jwt;
   }
   return req;

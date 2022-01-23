@@ -2,7 +2,10 @@ import { createContext, useCallback, useContext, useState, useEffect } from 'rea
 import { useNavigate } from 'react-router';
 
 import { login, register } from 'services/auth';
+import { createCompany } from 'services/company';
 import { getUserStats, getProfileImage } from 'services/getUser';
+import { createProfile } from 'services/profile';
+import { uploadFile } from 'services/uploadFile';
 
 const AuthContext = createContext({
   currentUser: {},
@@ -40,10 +43,23 @@ export const AuthContextProvider = ({ children }) => {
     [navigate]
   );
 
-  const handleRegister = async (data) => {
-    const userData = await register(data);
+  const handleRegister = async (data, uploadFileData) => {
+    //const userData = await register(data);
+    console.log('DATAAAAAAAA:??? ', data, uploadFileData);
+    const [userData, companyResponse, uploadResponse] = await Promise.all([
+      register(data.username, data.email, data.password),
+      createCompany(data.username),
+      uploadFile(uploadFileData),
+    ]);
+    console.log(
+      'REPOSNES DATAAAAAAAA:??? ',
+      companyResponse.data.id,
+      uploadResponse[0],
+      userData.user.id
+    );
+    await createProfile(companyResponse.data.id, uploadResponse[0].id, userData.user.id);
+
     loginUser(userData);
-    return userData;
   };
 
   const handleLogin = async (identifier, password) => {
