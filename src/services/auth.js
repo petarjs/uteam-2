@@ -7,6 +7,8 @@ export const login = async (identifier, password) => {
     const response = await axiosInstance.post('/api/auth/local/', user);
     console.log(response.data.user, '🚀🤘USER');
     console.log('token', response.data.jwt);
+    // console.log(response.data.user, '🚀🤘USER');
+    // console.log('token', response.data.jwt);
 
     return response.data;
   } catch (err) {
@@ -14,9 +16,13 @@ export const login = async (identifier, password) => {
   }
 };
 
-export const register = async (data) => {
+export const register = async (username, email, password) => {
   try {
-    const response = await axiosInstance.post(`/api/auth/local/register`, data);
+    const response = await axiosInstance.post(`/api/auth/local/register`, {
+      username: username,
+      email: email,
+      password: password,
+    });
     return response.data;
   } catch (err) {
     console.error(`${err.message}, 💥🤯`);

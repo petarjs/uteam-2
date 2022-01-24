@@ -1,18 +1,20 @@
-import { useState } from 'react';
+// import axios from 'axios';
+// import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
 import { useAuthContext } from 'context/AuthContext.jsx';
-
 import './Register.scss';
 
 const Registration = () => {
-  const { handleRegister } = useAuthContext();
-  const [userData, setUserData] = useState({
-    identifier: '',
-    password: '',
-    file: [],
-  });
+  // eslint-disable-next-line no-unused-vars
+  const { handleRegister, currentUser } = useAuthContext();
+  // const [userData, setUserData] = useState({
+  //   name: '',
+  //   email: '',
+  //   password: '',
+  //   image: null,
+  // });
 
   const {
     register,
@@ -24,11 +26,10 @@ const Registration = () => {
   } = useForm();
 
   const handleSubmitRegistration = async (data) => {
-    await handleRegister(data);
-    setUserData(data);
+    const uploadFileData = new FormData();
+    uploadFileData.append('files', data.image[0]);
+    await handleRegister(data, uploadFileData);
   };
-
-  console.log(userData);
 
   return (
     <div className="register">
@@ -45,7 +46,7 @@ const Registration = () => {
               id="name"
               className={`register__input ${errors.name && 'invalid'}`}
               placeholder="Name"
-              {...register('name', { required: 'Name is required' })}
+              {...register('username', { required: 'Name is required' })}
               onKeyUp={() => {
                 trigger('name');
               }}
@@ -116,7 +117,7 @@ const Registration = () => {
           </div>
 
           <div className="register__btn-conteiner">
-            <Link to="/login">
+            <Link to="/">
               <span className="register__paragraph"> Already have an account? </span>
             </Link>
             <input type="submit" value="submit" className="register__btn" />

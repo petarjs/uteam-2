@@ -1,7 +1,7 @@
 import { Button, Text, Image } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 
-import { API_ENDPOINT } from 'config/config.js';
+import { API_URL } from 'config/config.js';
 
 function TopBarLink({ text, href, onClick, imagePathURL, imageName }) {
   return (
@@ -19,12 +19,7 @@ function TopBarLink({ text, href, onClick, imagePathURL, imageName }) {
         mr="1rem"
       >
         {text === 'profilePhoto' ? (
-          <Image
-            borderRadius="full"
-            boxSize="50px"
-            src={API_ENDPOINT + imagePathURL}
-            alt={imageName}
-          />
+          <Image borderRadius="full" boxSize="50px" src={API_URL + imagePathURL} alt={imageName} />
         ) : (
           <Text fontSize="2xl">{text}</Text>
         )}
