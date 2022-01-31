@@ -9,17 +9,8 @@ import { useAuthContext } from 'context/AuthContext.jsx';
 import './Register.scss';
 
 const Registration = () => {
-  // eslint-disable-next-line no-unused-vars
   const { handleRegister, currentUser } = useAuthContext();
   const [profilePhoto, setProfilePhoto] = useState('https://bit.ly/dan-abramov');
-
-  // const [userData, setUserData] = useState({
-  //   name: '',
-  //   email: '',
-  //   password: '',
-  //   image: null,
-  // });
-
   const {
     register,
     handleSubmit,
@@ -27,7 +18,11 @@ const Registration = () => {
     // eslint-disable-next-line no-unused-vars
     reset,
     trigger,
+    watch,
   } = useForm();
+
+  const watchPassword = watch('password', '');
+  console.log('PASS JE?', watchPassword);
 
   const handleSubmitRegistration = async (data) => {
     const uploadFileData = new FormData();
@@ -122,6 +117,28 @@ const Registration = () => {
             />
           </div>
           {errors.password && <p className="register__error-message">{errors.password.message}</p>}
+
+          <div className="register__field">
+            <label className="register__label" htmlFor="confirmPassword">
+              Confirm Password:
+            </label>
+            <input
+              className={`register__input ${errors.confirmPassword && 'invalid'}`}
+              type="password"
+              id="confirmPassword"
+              placeholder="Confirm Password"
+              {...register('confirmPassword', {
+                required: 'Confirm Paswword is required',
+                validate: (value) => value === watchPassword,
+              })}
+              onKeyUp={() => {
+                trigger('confirmPassword');
+              }}
+            />
+          </div>
+          {errors.confirmPassword && errors.confirmPassword.type === 'validate' && (
+            <p className="register__error-message">Passwords do not match!</p>
+          )}
 
           <div className="register__field">
             <label className="register__label" htmlFor="upload_file">
