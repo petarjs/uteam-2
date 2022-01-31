@@ -1,11 +1,13 @@
+import _ from 'lodash';
 import { createContext, useCallback, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
 import { login, register } from 'services/auth';
+import { changeUserStats, resetPassword } from 'services/changeUser';
 import { createCompany } from 'services/company';
-import { getUserStats, getProfileImage } from 'services/getUser';
-import { createProfile } from 'services/profile';
-import { uploadFile } from 'services/uploadFile';
+import { getUserStats, getProfileImage, getProfileId, getProfileImageId } from 'services/getUser';
+import { createProfile, changeProfilePhoto } from 'services/profile';
+import { uploadFile, deleteFile } from 'services/uploadFile';
 
 const AuthContext = createContext({
   currentUser: {},
@@ -21,27 +23,24 @@ export const AuthContextProvider = ({ children }) => {
   const [isUserLoggedIn, setUserLoggedIn] = useState(false);
   const navigate = useNavigate();
 
-  const loginUser = useCallback(
-    async (userData) => {
-      localStorage.setItem('userJwt', userData.jwt);
-      setUserLoggedIn(true);
-      navigate('/pending-approval');
-      const user = await getUserStats();
-      const userImage = await getProfileImage(user.id);
-      user['imagePathURL'] = userImage[0];
-      user['imageName'] = userImage[1];
-      setCurrentUser(user);
-      console.log(
-        'USE DATARRRR U LOGINUSER JE::: ',
-        userData,
-        userData.jwt,
-        user,
-        ' slika je: ?? ',
-        userImage
-      );
-    },
-    [navigate]
-  );
+  const loginUser = useCallback(async (userData) => {
+    localStorage.setItem('userJwt', userData.jwt);
+    setUserLoggedIn(true);
+    navigate('/pending-approval');
+    const user = await getUserStats();
+    const userImage = await getProfileImage(user.id);
+    user['imagePathURL'] = userImage[0];
+    user['imageName'] = userImage[1];
+    setCurrentUser(user);
+    console.log(
+      'USE DATARRRR U LOGINUSER JE::: ',
+      userData,
+      userData.jwt,
+      user,
+      ' slika je: ?? ',
+      userImage
+    );
+  }, []);
 
   const handleRegister = async (data, uploadFileData) => {
     //const userData = await register(data);
@@ -51,12 +50,7 @@ export const AuthContextProvider = ({ children }) => {
       createCompany(data.username),
       uploadFile(uploadFileData),
     ]);
-    console.log(
-      'REPOSNES DATAAAAAAAA:??? ',
-      companyResponse.data.id,
-      uploadResponse[0],
-      userData.user.id
-    );
+    console.log('REPOSNES DATAAAAAAAA:??? ', companyResponse.data.id, uploadResponse[0], userData);
     await createProfile(companyResponse.data.id, uploadResponse[0].id, userData.user.id);
 
     loginUser(userData);
@@ -72,6 +66,34 @@ export const AuthContextProvider = ({ children }) => {
     setCurrentUser(null);
     setUserLoggedIn(false);
     localStorage.clear();
+  };
+
+  const changeUsername = async (userId, newUsername) => {
+    const newUserData = await changeUserStats(userId, newUsername);
+    const user = _.cloneDeep(currentUser);
+    user['username'] = newUserData['username'];
+    setCurrentUser(user);
+  };
+
+  const changeUserPhoto = async (uploadFileData, userId) => {
+    const [uploadResponse, profileId] = await Promise.all([
+      uploadFile(uploadFileData),
+      getProfileId(userId),
+    ]);
+    const oldProfilePhotoId = await getProfileImageId(userId);
+    deleteFile(oldProfilePhotoId);
+
+    await changeProfilePhoto(profileId, uploadResponse[0].id);
+    const userImage = await getProfileImage(userId);
+    const user = _.cloneDeep(currentUser);
+    user['imagePathURL'] = userImage[0];
+    user['imageName'] = userImage[1];
+    setCurrentUser(user);
+  };
+
+  const changePassword = async (userId, userNewPassword) => {
+    const resetPasswordResponse = await resetPassword(userId, userNewPassword);
+    console.log('resetPasswordResponse', resetPasswordResponse, userNewPassword);
   };
 
   useEffect(() => {
@@ -90,6 +112,9 @@ export const AuthContextProvider = ({ children }) => {
     handleLogin,
     handleLogout,
     handleRegister,
+    changeUsername,
+    changeUserPhoto,
+    changePassword,
   };
 
   return <AuthContext.Provider value={authContext}>{children}</AuthContext.Provider>;

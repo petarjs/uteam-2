@@ -8,3 +8,12 @@ export const uploadFile = async (userImg) => {
     console.error(`${err.message}, 💥🤯`);
   }
 };
+
+export const deleteFile = async (userId) => {
+  try {
+    const response = await axiosInstance.delete(`/api/upload/files/${userId}`);
+    return response.data;
+  } catch (err) {
+    console.error(`${err.message}, 💥🤯`);
+  }
+};

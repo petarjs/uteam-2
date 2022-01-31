@@ -22,7 +22,6 @@ const Registration = () => {
   } = useForm();
 
   const watchPassword = watch('password', '');
-  console.log('PASS JE?', watchPassword);
 
   const handleSubmitRegistration = async (data) => {
     const uploadFileData = new FormData();

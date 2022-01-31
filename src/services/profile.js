@@ -14,3 +14,17 @@ export const createProfile = async (companyId, uploadFileId, userId) => {
     console.error(`${err.message}, 💥🤯`);
   }
 };
+
+export const changeProfilePhoto = async (profileId, uploadFileId) => {
+  try {
+    const response = await axiosInstance.put(`/api/profiles/${profileId}`, {
+      data: {
+        profilePhoto: uploadFileId,
+      },
+    });
+    console.log('change proflie photoo data???', response.data);
+    return response.data;
+  } catch (err) {
+    console.error(`${err.message}, 💥🤯`);
+  }
+};
