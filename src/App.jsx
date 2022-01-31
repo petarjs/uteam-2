@@ -16,6 +16,7 @@ import Team from './components/Layout/Team/Team.jsx';
 import TopBar from './components/Layout/Topbar/TopBar.jsx';
 import ProtectedRoute from './components/protectedRoute/ProtectedRoute.jsx';
 
+import CreateQuestion from 'components/features/CreateQuestion/CreateQuestion';
 import { useAuthContext } from 'context/AuthContext.jsx';
 
 function App() {
@@ -58,6 +59,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Questions />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/create/question"
+            element={
+              <ProtectedRoute>
+                <CreateQuestion />
               </ProtectedRoute>
             }
           />

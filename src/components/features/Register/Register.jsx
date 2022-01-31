@@ -7,21 +7,12 @@ import { useAuthContext } from 'context/AuthContext.jsx';
 import './Register.scss';
 
 const Registration = () => {
-  // eslint-disable-next-line no-unused-vars
-  const { handleRegister, currentUser } = useAuthContext();
-  // const [userData, setUserData] = useState({
-  //   name: '',
-  //   email: '',
-  //   password: '',
-  //   image: null,
-  // });
+  const { handleRegister } = useAuthContext();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    // eslint-disable-next-line no-unused-vars
-    reset,
     trigger,
   } = useForm();
 
@@ -35,7 +26,6 @@ const Registration = () => {
     <div className="register">
       <div className="register__content">
         <h2 className="register__title">uTeam - Register</h2>
-
         <form onSubmit={handleSubmit((data) => handleSubmitRegistration(data))}>
           <div className="register__field">
             <label className="register__label" htmlFor="name">
@@ -103,7 +93,6 @@ const Registration = () => {
             />
           </div>
           {errors.password && <p className="register__error-message">{errors.password.message}</p>}
-
           <div className="register__field">
             <label htmlFor="upload_file">Profile Photo</label>
             <input

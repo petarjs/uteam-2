@@ -1,0 +1,150 @@
+@use '../../../utility-styles' as *;
+
+.questions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+  padding: 3.4rem 4rem 3.4rem 4.9rem;
+
+  &__nav {
+    display: flex;
+    justify-content: space-between;
+
+    &_button {
+      @extend %btn;
+      padding: 0.7rem 2.4rem;
+      // background-color: var(--button-blue);
+      background-color: #003d80;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--white-text);
+      border-radius: 1rem;
+
+      &:hover {
+        background-color: var(--button-blue-hover);
+      }
+    }
+  }
+
+  &__btn_box {
+    display: flex;
+    background-color: #003d80;
+    border-radius: 1rem;
+  }
+
+  &__heading {
+    font-size: 2.8rem;
+    font-weight: 700;
+  }
+
+  &__main {
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 2.2rem;
+  }
+
+  &__li {
+    list-style: none;
+  }
+
+  &__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2.5rem 2.2rem;
+    border: 1px solid white;
+
+    & > div {
+      display: flex;
+      align-items: center;
+      gap: 2.4rem;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+
+    & > small {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    & > div {
+      font-size: 2rem;
+    }
+  }
+
+  &__arrows img {
+    height: 3.2rem;
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 2rem;
+
+    & button {
+      @extend %btn;
+      padding: 0.6rem 2.4rem;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--white-text);
+      border-radius: 1rem;
+    }
+
+    &_edit {
+      // background-color: var(--button-blue);
+      background-color: #003d80;
+
+      &:hover {
+        background-color: var(--button-blue-hover);
+      }
+    }
+
+    &_delete {
+      background-color: #00244c;
+
+      &:hover {
+        background-color: var(--error);
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .questions {
+    height: 100%;
+    overflow-y: scroll;
+  }
+
+  .questions__container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+    padding: 1.2rem 1rem;
+  }
+
+  .questions__buttons {
+    align-self: flex-end;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .questions__nav {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+  }
+  .questions__container {
+    padding: 2rem;
+  }
+  .questions__buttons {
+    align-self: center;
+  }
+}
