@@ -1,5 +1,7 @@
 // import axios from 'axios';
 // import { useState } from 'react';
+import { Avatar, Center } from '@chakra-ui/react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
@@ -9,6 +11,8 @@ import './Register.scss';
 const Registration = () => {
   // eslint-disable-next-line no-unused-vars
   const { handleRegister, currentUser } = useAuthContext();
+  const [profilePhoto, setProfilePhoto] = useState('https://bit.ly/dan-abramov');
+
   // const [userData, setUserData] = useState({
   //   name: '',
   //   email: '',
@@ -29,6 +33,21 @@ const Registration = () => {
     const uploadFileData = new FormData();
     uploadFileData.append('files', data.image[0]);
     await handleRegister(data, uploadFileData);
+  };
+
+  const handleFileSelected = (e) => {
+    const files = Array.from(e.target.files);
+    if (files && files[0]) {
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+        setProfilePhoto(e.target.result);
+      };
+
+      reader.readAsDataURL(files[0]);
+    } else {
+      setProfilePhoto('https://bit.ly/dan-abramov');
+    }
   };
 
   return (
@@ -105,13 +124,19 @@ const Registration = () => {
           {errors.password && <p className="register__error-message">{errors.password.message}</p>}
 
           <div className="register__field">
-            <label htmlFor="upload_file">Profile Photo</label>
+            <label className="register__label" htmlFor="upload_file">
+              Profile Photo:
+            </label>
+            <Center>
+              <Avatar name={currentUser?.imageName} src={profilePhoto} size="2xl" />
+            </Center>
             <input
               type="file"
               id="upload_file"
               accept=".png, .jpg, .jpeg"
               placeholder="Upload File"
               {...register('image', { required: 'Image is required' })}
+              onChange={(e) => handleFileSelected(e)}
             />
             {errors.image && <p className="register__error-message">{errors.image.message}</p>}
           </div>
