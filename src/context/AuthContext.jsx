@@ -57,8 +57,8 @@ export const AuthContextProvider = ({ children }) => {
   };
 
   const handleLogin = async (identifier, password) => {
-    const userData = await login(identifier, password);
-    loginUser(userData);
+    const loginResponse = await login(identifier, password);
+    loginUser(loginResponse.data);
   };
 
   const handleLogout = () => {
@@ -96,6 +96,14 @@ export const AuthContextProvider = ({ children }) => {
     console.log('resetPasswordResponse', resetPasswordResponse, userNewPassword);
   };
 
+  const isCurrentPasswordCorrect = async (userCurrentPassword, userEmail) => {
+    const loginResponse = await login(userEmail, userCurrentPassword);
+    if (loginResponse.status === 200) {
+      return true;
+    }
+    return false;
+  };
+
   useEffect(() => {
     const loggedInUser = localStorage.getItem('userJwt');
     if (loggedInUser) {
@@ -115,6 +123,7 @@ export const AuthContextProvider = ({ children }) => {
     changeUsername,
     changeUserPhoto,
     changePassword,
+    isCurrentPasswordCorrect,
   };
 
   return <AuthContext.Provider value={authContext}>{children}</AuthContext.Provider>;

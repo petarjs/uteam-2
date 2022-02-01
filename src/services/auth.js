@@ -10,9 +10,10 @@ export const login = async (identifier, password) => {
     // console.log(response.data.user, '🚀🤘USER');
     // console.log('token', response.data.jwt);
 
-    return response.data;
+    return response;
   } catch (err) {
     console.error(`${err.message}, 💥🤯`);
+    return err.response;
   }
 };
 

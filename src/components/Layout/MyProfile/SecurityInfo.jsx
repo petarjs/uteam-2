@@ -5,23 +5,34 @@ import { useForm } from 'react-hook-form';
 import { useAuthContext } from 'context/AuthContext.jsx';
 
 function SecurityInfo() {
-  const { currentUser, changePassword } = useAuthContext();
+  const { currentUser, changePassword, isCurrentPasswordCorrect } = useAuthContext();
 
   const [isEditing, setIsEditing] = useState(false);
+  const [correctCurrentPassword, setCorrectCurrentPassword] = useState(true);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     // eslint-disable-next-line no-unused-vars
-    reset,
+    resetField,
     trigger,
     watch,
   } = useForm();
 
-  const watchPassword = watch('password', false);
+  const watchPassword = watch('newPassword', false);
 
   const handleEditProfile = async (data) => {
-    await changePassword(currentUser.id, data.password);
+    const currentPasswordCorrect = await isCurrentPasswordCorrect(data.password, currentUser.email);
+    if (currentPasswordCorrect) {
+      changePassword(currentUser.id, data.newPassword);
+      resetField('password');
+      resetField('newPassword');
+      resetField('confirmPassword');
+    } else {
+      setCorrectCurrentPassword(false);
+      trigger('password');
+    }
 
     setIsEditing(false);
   };
@@ -49,7 +60,7 @@ function SecurityInfo() {
         </FormControl>
         <FormControl mb="1rem">
           <FormLabel htmlFor="password" fontSize="1.5rem">
-            New Password
+            Current Password
           </FormLabel>
           <Input
             disabled={!isEditing}
@@ -61,18 +72,51 @@ function SecurityInfo() {
               required: 'Password is required',
               minLength: {
                 value: 6,
-                message: 'Your password must be at least 6 characters long',
+                message: 'Your password is at least 6 characters long',
               },
               maxLength: {
                 value: 15,
-                message: 'Your password must not be longer than 15 characters',
+                message: 'Your password is not longer than 15 characters',
               },
             })}
             onKeyUp={() => {
               trigger('password');
+              setCorrectCurrentPassword(true);
             }}
           />
           {errors.password && <p className="register__error-message">{errors.password.message}</p>}
+          {!correctCurrentPassword && (
+            <p className="register__error-message">You entered wrong current password!</p>
+          )}
+        </FormControl>
+        <FormControl mb="1rem">
+          <FormLabel htmlFor="newPassword" fontSize="1.5rem">
+            New Password
+          </FormLabel>
+          <Input
+            disabled={!isEditing}
+            size="lg"
+            type="password"
+            id="newPassword"
+            placeholder="New Password"
+            {...register('newPassword', {
+              required: 'New Password is required',
+              minLength: {
+                value: 6,
+                message: 'Your New Password must be at least 6 characters long',
+              },
+              maxLength: {
+                value: 15,
+                message: 'Your New Password must not be longer than 15 characters',
+              },
+            })}
+            onKeyUp={() => {
+              trigger(['newPassword', 'confirmPassword']);
+            }}
+          />
+          {errors.newPassword && (
+            <p className="register__error-message">{errors.newPassword.message}</p>
+          )}
         </FormControl>
 
         <FormControl mb="1rem">
@@ -84,9 +128,9 @@ function SecurityInfo() {
             size="lg"
             type="password"
             id="confirmPassword"
-            placeholder="Confirm Password"
+            placeholder="Confirm New Password"
             {...register('confirmPassword', {
-              required: 'Confirm Password is required',
+              required: 'Confirm New Password is required',
               validate: (value) => value === watchPassword,
             })}
             onKeyUp={() => {
