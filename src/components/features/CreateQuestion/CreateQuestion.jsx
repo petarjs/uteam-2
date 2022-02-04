@@ -1,12 +1,9 @@
-/* eslint-disable no-unused-vars */
-import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
 import classes from './CreateQuestion.module.scss';
 
-import { useQuestionsOrderContext } from 'context/QuestionsOrderContext';
-import { usePostQuestionMutation } from 'services/questionApi';
+import { usePostQuestionMutation, useGetQuestionsQuery } from 'services/questionApi';
 
 const CreateQuestion = () => {
   const {
@@ -15,24 +12,31 @@ const CreateQuestion = () => {
     formState: { errors },
   } = useForm();
   const [postQuestion] = usePostQuestionMutation();
+  const { data } = useGetQuestionsQuery();
   const navigate = useNavigate();
-
-  const { currentOrder, addOrderForQuestion } = useQuestionsOrderContext();
+  const lastQuestionOrder = data?.data?.slice(-1)?.[0]?.attributes?.order;
 
   const handlePostQuestion = async (data) => {
     try {
-      console.log(data, 'DATA IZ FORME 👀');
+      let order = 0;
 
-      addOrderForQuestion();
-      console.log(currentOrder, 'CURRENT ORDER 👀');
+      if (lastQuestionOrder) {
+        order = lastQuestionOrder + 1;
+      }
+
+      if (!lastQuestionOrder) {
+        order++;
+      }
+
+      console.log(order, 'ORDER PRE SLANJA 🚀');
 
       const questionData = {
         ...data,
-        order: currentOrder,
+        order,
       };
 
       await postQuestion(questionData);
-      // navigate('/questions');
+      navigate('/questions');
     } catch (err) {
       console.error(`${err.message}, 💥🤯`);
     }

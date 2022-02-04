@@ -5,9 +5,11 @@ import { API_URL } from 'config/config';
 export const questionApi = createApi({
   reducerPath: 'questionApi',
   baseQuery: fetchBaseQuery({ baseUrl: `${API_URL}/api` }),
+  tagTypes: ['questions'],
   endpoints: (builder) => ({
     getQuestions: builder.query({
       query: () => '/questions',
+      providesTags: ['questions'],
     }),
     postQuestion: builder.mutation({
       query: (data) => ({
@@ -15,6 +17,7 @@ export const questionApi = createApi({
         method: 'POST',
         body: { data },
       }),
+      invalidatesTags: ['questions'],
     }),
     editQuestion: builder.mutation({
       query: (data, id) => {
@@ -26,11 +29,14 @@ export const questionApi = createApi({
           body: { data },
         };
       },
+      invalidatesTags: ['questions'],
     }),
     deleteQuestions: builder.mutation({
       query: (id) => ({ url: `/questions/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['questions'],
     }),
   }),
 });
 
-export const { usePostQuestionMutation, useGetQuestionsQuery } = questionApi;
+export const { usePostQuestionMutation, useGetQuestionsQuery, useDeleteQuestionsMutation } =
+  questionApi;

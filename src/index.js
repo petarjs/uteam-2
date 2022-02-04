@@ -9,7 +9,6 @@ import theme from './utility-chakra/theme.jsx';
 
 import './index.css';
 import { AuthContextProvider } from 'context/AuthContext.jsx';
-import { QuestionsOrderContextProvider } from 'context/QuestionsOrderContext.jsx';
 import store from 'store/store.js';
 
 ReactDOM.render(
@@ -17,11 +16,9 @@ ReactDOM.render(
     <BrowserRouter>
       <Provider store={store}>
         <AuthContextProvider>
-          <QuestionsOrderContextProvider>
-            <ChakraProvider theme={theme}>
-              <App />
-            </ChakraProvider>
-          </QuestionsOrderContextProvider>
+          <ChakraProvider theme={theme}>
+            <App />
+          </ChakraProvider>
         </AuthContextProvider>
       </Provider>
     </BrowserRouter>

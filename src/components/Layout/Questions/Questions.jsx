@@ -5,22 +5,22 @@ import arrowUp from '../../../images/chevron-up-outline.svg';
 
 import classes from './Questions.module.scss';
 
-import { useGetQuestionsQuery } from 'services/questionApi';
+import { useGetQuestionsQuery, useDeleteQuestionsMutation } from 'services/questionApi';
 
 function Questions() {
-  const { data } = useGetQuestionsQuery();
+  const { data: questionsFromApi } = useGetQuestionsQuery();
+  const [deleteQuestion] = useDeleteQuestionsMutation();
   const navigate = useNavigate();
 
-  const questions = data?.data;
-  // console.log(questions, 'QUESTIONS KOMPONENTA 👀');
-  // console.log(data, ' DATA CELA QUESTIONS KOMPONENTA 👀');
+  console.log(questionsFromApi?.data, 'Data from API 🚀🚀');
 
-  // const questions2 = [
-  //   { type: 'text', text: 'Do you have any pets?', order: 1 },
-  //   { type: 'image', text: 'Take a picture of your Christmas tree', order: 2 },
-  //   { type: 'text', text: 'Which city do you live in?', order: 3 },
-  //   { type: 'long text', text: 'What is your favorite movie?', order: 4 },
-  // ];
+  const handleDelete = async (id) => {
+    try {
+      await deleteQuestion(id);
+    } catch (err) {
+      console.error(`${err.message}, 💥🤯`);
+    }
+  };
 
   return (
     <div className={classes.questions}>
@@ -37,8 +37,8 @@ function Questions() {
       </nav>
       <main className={classes.questions__main}>
         <ul className={classes.questions__list}>
-          {questions?.map((question) => (
-            <li className={classes.questions__li} key={question.id}>
+          {questionsFromApi?.data?.map((question, i) => (
+            <li className={classes.questions__li} key={i}>
               <div className={classes.questions__container}>
                 <div>
                   <div className={classes.questions__arrows}>
@@ -47,14 +47,19 @@ function Questions() {
                   </div>
                   <div className={classes.questions__content}>
                     <small>
-                      Question {question.attributes.order + 1} - {question.attributes.type}
+                      Question {i + 1} - {question.attributes.type}
                     </small>
                     <div>{question.attributes.text}</div>
                   </div>
                 </div>
                 <div className={classes.questions__buttons}>
                   <button className={classes.questions__buttons_edit}>Edit</button>
-                  <button className={classes.questions__buttons_delete}>Delete</button>
+                  <button
+                    className={classes.questions__buttons_delete}
+                    onClick={() => handleDelete(question.id)}
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             </li>
