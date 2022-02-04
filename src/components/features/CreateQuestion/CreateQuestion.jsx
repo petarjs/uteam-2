@@ -14,6 +14,7 @@ const CreateQuestion = () => {
   const [postQuestion] = usePostQuestionMutation();
   const { data } = useGetQuestionsQuery();
   const navigate = useNavigate();
+
   const lastQuestionOrder = data?.data?.slice(-1)?.[0]?.attributes?.order;
 
   const handlePostQuestion = async (data) => {
