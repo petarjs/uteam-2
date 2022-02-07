@@ -9,6 +9,14 @@ const REGEXFOREMAIL =
 const PROFILEIMAGEURLPATH = `data[0].attributes.profilePhoto.data.attributes.url`;
 const PROFILEIMAGEID = `data[0].attributes.profilePhoto.data.id`;
 const PROFILEIMAGENAME = `data[0].attributes.name`;
-export { API_URL, REGEXFOREMAIL, PROFILEIMAGEURLPATH, PROFILEIMAGENAME, PROFILEIMAGEID };
+const COMPANYLOGOID = `data[0].attributes.logo.data.id`;
+export {
+  API_URL,
+  REGEXFOREMAIL,
+  PROFILEIMAGEURLPATH,
+  PROFILEIMAGENAME,
+  PROFILEIMAGEID,
+  COMPANYLOGOID,
+};
 // const API_URL = 'https://uteam-api-7nngy.ondigitalocean.app/api/';
 // const API_URL_LOCAL = 'http://localhost:1337/api/';

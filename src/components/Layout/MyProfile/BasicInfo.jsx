@@ -8,6 +8,7 @@ import {
   FormErrorMessage,
   Avatar,
   Center,
+  useToast,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
@@ -20,6 +21,7 @@ function BasicInfo() {
   const [profilePhoto, setProfilePhoto] = useState(API_URL + currentUser?.imagePathURL);
   const [profilePhotoFile, setProfilePhotoFile] = useState();
   const [isEditing, setIsEditing] = useState(false);
+  const toast = useToast();
 
   const handleNameChange = (e) => setNameInput(e.target.value);
   const isNameError = nameInput === '';
@@ -37,6 +39,13 @@ function BasicInfo() {
     } else {
       console.log('profilna nije promenjena', profilePhoto);
     }
+
+    toast({
+      description: 'Changes saved.',
+      status: 'success',
+      duration: 2000,
+      isClosable: true,
+    });
 
     setIsEditing(false);
   };

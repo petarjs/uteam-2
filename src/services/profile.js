@@ -1,12 +1,13 @@
 import axiosInstance from './http';
 
-export const createProfile = async (companyId, uploadFileId, userId) => {
+export const createProfile = async (companyId, uploadFileId, userId, username) => {
   try {
     const response = await axiosInstance.post('/api/profiles', {
       data: {
         company: companyId,
         profilePhoto: uploadFileId,
         user: userId,
+        name: username,
       },
     });
     return response.data;

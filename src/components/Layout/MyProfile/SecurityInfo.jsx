@@ -1,4 +1,4 @@
-import { Heading, Box, FormControl, FormLabel, Input } from '@chakra-ui/react';
+import { Heading, Box, FormControl, FormLabel, Input, useToast } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -9,6 +9,7 @@ function SecurityInfo() {
 
   const [isEditing, setIsEditing] = useState(false);
   const [correctCurrentPassword, setCorrectCurrentPassword] = useState(true);
+  const toast = useToast();
 
   const {
     register,
@@ -33,6 +34,13 @@ function SecurityInfo() {
       setCorrectCurrentPassword(false);
       trigger('password');
     }
+
+    toast({
+      description: 'Changes saved.',
+      status: 'success',
+      duration: 2000,
+      isClosable: true,
+    });
 
     setIsEditing(false);
   };
