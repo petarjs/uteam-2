@@ -20,15 +20,11 @@ export const questionApi = createApi({
       invalidatesTags: ['questions'],
     }),
     editQuestion: builder.mutation({
-      query: (data, id) => {
-        // TODO: Da stavim umesto {} > () kada zavrsim.
-        console.log(data, id, 'ID 👀');
-        return {
-          url: `/questions/${id}`,
-          method: 'PUT',
-          body: { data },
-        };
-      },
+      query: ({ questionId: id, questionData: data }) => ({
+        url: `/questions/${id}`,
+        method: 'PUT',
+        body: { data },
+      }),
       invalidatesTags: ['questions'],
     }),
     deleteQuestions: builder.mutation({
@@ -38,5 +34,9 @@ export const questionApi = createApi({
   }),
 });
 
-export const { usePostQuestionMutation, useGetQuestionsQuery, useDeleteQuestionsMutation } =
-  questionApi;
+export const {
+  usePostQuestionMutation,
+  useGetQuestionsQuery,
+  useDeleteQuestionsMutation,
+  useEditQuestionMutation,
+} = questionApi;

@@ -71,6 +71,14 @@ function App() {
             }
           />
           <Route
+            path="/edit/question"
+            element={
+              <ProtectedRoute>
+                <CreateQuestion simplified />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/team"
             element={
               <ProtectedRoute>

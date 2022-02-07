@@ -1,21 +1,39 @@
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
 import classes from './CreateQuestion.module.scss';
 
-import { usePostQuestionMutation, useGetQuestionsQuery } from 'services/questionApi';
+import { useQuestionEditContext } from 'context/QuestionEditContext';
+import {
+  usePostQuestionMutation,
+  useGetQuestionsQuery,
+  useEditQuestionMutation,
+} from 'services/questionApi';
 
-const CreateQuestion = () => {
+const CreateQuestion = ({ simplified }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setFocus,
   } = useForm();
+
   const [postQuestion] = usePostQuestionMutation();
+  const [editQuestion] = useEditQuestionMutation();
   const { data } = useGetQuestionsQuery();
   const navigate = useNavigate();
+  const {
+    questionInfo: { id, order, text },
+  } = useQuestionEditContext();
 
   const lastQuestionOrder = data?.data?.slice(-1)?.[0]?.attributes?.order;
+
+  useEffect(() => {
+    setFocus('text');
+  }, [setFocus]);
+
+  console.log(text);
 
   const handlePostQuestion = async (data) => {
     try {
@@ -29,8 +47,6 @@ const CreateQuestion = () => {
         order++;
       }
 
-      console.log(order, 'ORDER PRE SLANJA 🚀');
-
       const questionData = {
         ...data,
         order,
@@ -43,12 +59,31 @@ const CreateQuestion = () => {
     }
   };
 
+  const handleEditQuestion = async (data) => {
+    try {
+      const questionData = {
+        ...data,
+        order,
+      };
+      const questionId = id + '';
+
+      await editQuestion({ questionId, questionData });
+      navigate('/questions');
+    } catch (err) {
+      console.error(`${err.message}, 💥🤯`);
+    }
+  };
+
   return (
     <main className={classes.question}>
-      <h2 className={classes.question__heading}>Add new Question</h2>
+      <h2 className={classes.question__heading}>
+        {simplified ? 'Edit quesiton' : 'Add new Question'}
+      </h2>
       <div className={classes.question__content}>
         <form
-          onSubmit={handleSubmit((data) => handlePostQuestion(data))}
+          onSubmit={handleSubmit((data) =>
+            simplified ? handleEditQuestion(data) : handlePostQuestion(data)
+          )}
           className={classes.question__form}
         >
           <div className={classes.question__box}>
@@ -60,6 +95,8 @@ const CreateQuestion = () => {
               placeholder="Question text"
               id="text"
               className={classes.question__input}
+              // FIXME: Da namestim da se vrednost vec nalazi u input-u kod edit-a, i da moze da se pise nova.
+              // value={simplified && text}
             />
             {errors.text && <p className={classes.question__error}>{errors.text.message}</p>}
           </div>

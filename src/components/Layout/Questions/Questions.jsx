@@ -5,6 +5,7 @@ import arrowUp from '../../../images/chevron-up-outline.svg';
 
 import classes from './Questions.module.scss';
 
+import { useQuestionEditContext } from 'context/QuestionEditContext';
 import { useGetQuestionsQuery, useDeleteQuestionsMutation } from 'services/questionApi';
 
 function Questions() {
@@ -12,7 +13,14 @@ function Questions() {
   const [deleteQuestion] = useDeleteQuestionsMutation();
   const navigate = useNavigate();
 
+  const { handleIdAndOrder } = useQuestionEditContext();
+
   console.log(questionsFromApi?.data, 'Data from API 🚀🚀');
+
+  const handleEdit = ({ id, attributes: { order, text } }) => {
+    handleIdAndOrder({ id, order, text });
+    navigate('/edit/question');
+  };
 
   const handleDelete = async (id) => {
     try {
@@ -53,7 +61,12 @@ function Questions() {
                   </div>
                 </div>
                 <div className={classes.questions__buttons}>
-                  <button className={classes.questions__buttons_edit}>Edit</button>
+                  <button
+                    className={classes.questions__buttons_edit}
+                    onClick={() => handleEdit(question)}
+                  >
+                    Edit
+                  </button>
                   <button
                     className={classes.questions__buttons_delete}
                     onClick={() => handleDelete(question.id)}
