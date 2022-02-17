@@ -5,9 +5,15 @@ export const login = async (identifier, password) => {
 
   try {
     const response = await axiosInstance.post('/api/auth/local/', user);
-    return response.data;
+    console.log(response.data.user, '🚀🤘USER');
+    console.log('token', response.data.jwt);
+    // console.log(response.data.user, '🚀🤘USER');
+    // console.log('token', response.data.jwt);
+
+    return response;
   } catch (err) {
     console.error(`${err.message}, 💥🤯`);
+    return err.response;
   }
 };
 

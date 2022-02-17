@@ -4,7 +4,7 @@ import { API_URL } from 'config/config.js';
 
 const axiosInstance = axios.create({
   baseURL: API_URL,
-  timeout: 5000,
+  timeout: 50000,
 });
 
 axiosInstance.interceptors.request.use(function (req) {
