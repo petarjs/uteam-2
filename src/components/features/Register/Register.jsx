@@ -1,16 +1,20 @@
 // import axios from 'axios';
 // import { useState } from 'react';
 import { Avatar, Center } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
 import { useAuthContext } from 'context/AuthContext.jsx';
+import { getCompanies } from 'services/company';
+
 import './Register.scss';
 
 const Registration = () => {
   const { handleRegister, currentUser } = useAuthContext();
   const [profilePhoto, setProfilePhoto] = useState('https://bit.ly/dan-abramov');
+  // eslint-disable-next-line no-unused-vars
+  const [companies, setCompanies] = useState([]);
   const {
     register,
     handleSubmit,
@@ -21,6 +25,16 @@ const Registration = () => {
     watch,
   } = useForm();
 
+  const getAllCompanies = async () => {
+    const companies = await getCompanies();
+    setCompanies(companies.data);
+  };
+
+  useEffect(() => {
+    getAllCompanies();
+  }, []);
+
+  const watchUsername = watch('username', '');
   const watchPassword = watch('password', '');
 
   const handleSubmitRegistration = async (data) => {
@@ -127,7 +141,7 @@ const Registration = () => {
               id="confirmPassword"
               placeholder="Confirm Password"
               {...register('confirmPassword', {
-                required: 'Confirm Paswword is required',
+                required: 'Confirm Password is required',
                 validate: (value) => value === watchPassword,
               })}
               onKeyUp={() => {
@@ -137,6 +151,33 @@ const Registration = () => {
           </div>
           {errors.confirmPassword && errors.confirmPassword.type === 'validate' && (
             <p className="register__error-message">Passwords do not match!</p>
+          )}
+
+          <div className="register__field">
+            <label className="register__label" htmlFor="chooseCompany">
+              Choose company:
+            </label>
+            <select
+              name="chooseCompany"
+              className={`register__input ${errors.chooseCompany && 'invalid'}`}
+              id="chooseCompany"
+              {...register('chooseCompany', {
+                required: 'Choose one company please!',
+              })}
+            >
+              <option value="">Please select</option>
+              <option value="0">{watchUsername + "'s company (my company)"}</option>
+              {companies.map((company) => {
+                return (
+                  <option key={company.id} value={company.id}>
+                    {company.attributes.name}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+          {errors.chooseCompany && (
+            <p className="register__error-message">{errors.chooseCompany.message}</p>
           )}
 
           <div className="register__field">

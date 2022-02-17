@@ -41,10 +41,10 @@ export const AuthContextProvider = ({ children }) => {
     const userCompany = await getCompany(profileId);
     console.log('USERS compannuuuuuu:??', userCompany);
     const company = {};
-    company['id'] = userCompany.data[0].id;
-    company['name'] = userCompany.data[0].attributes.name;
-    company['imagePathURL'] = userCompany.data[0].attributes.logo.data.attributes.url;
-    company['imageName'] = userCompany.data[0].attributes.logo.data.attributes.name;
+    company['id'] = userCompany.data[0]?.id;
+    company['name'] = userCompany.data[0]?.attributes.name;
+    company['imagePathURL'] = userCompany.data[0]?.attributes.logo.data?.attributes.url;
+    company['imageName'] = userCompany.data[0]?.attributes.logo.data?.attributes.name;
     user['imagePathURL'] = userImage[0];
     user['imageName'] = userImage[1];
     setCurrentCompany(company);
@@ -62,20 +62,23 @@ export const AuthContextProvider = ({ children }) => {
   const handleRegister = async (data, uploadFileData) => {
     //const userData = await register(data);
     console.log('DATAAAAAAAA:??? ', data, uploadFileData);
-    const [userData, companyResponse, uploadResponse] = await Promise.all([
+    let companyResponse;
+    let companyId;
+    if (!Number(data.chooseCompany)) {
+      companyResponse = await createCompany(data.username);
+      companyId = companyResponse.data.id;
+    } else {
+      companyId = Number(data.chooseCompany);
+    }
+
+    const [userData, uploadResponse] = await Promise.all([
       register(data.username, data.email, data.password),
-      createCompany(data.username),
       uploadFile(uploadFileData),
     ]);
-    console.log('REPOSNES DATAAAAAAAA:??? ', companyResponse.data.id, uploadResponse[0], userData);
-    await createProfile(
-      companyResponse.data.id,
-      uploadResponse[0].id,
-      userData.user.id,
-      userData.user.username
-    );
+    console.log('REPOSNES DATAAAAAAAA:??? ', companyId, uploadResponse[0], userData);
+    await createProfile(companyId, uploadResponse[0].id, userData.user.id, userData.user.username);
     const profileId = await getProfileId(userData.user.id);
-    await addProfileToCompany(companyResponse.data.id, profileId);
+    await addProfileToCompany(companyId, profileId);
     loginUser(userData);
   };
 
@@ -142,7 +145,7 @@ export const AuthContextProvider = ({ children }) => {
     const uploadResponse = await uploadFile(uploadFileData);
     const profileId = await getProfileId(currentUser.id);
     const oldCompanyLogoId = await getCompanyLogoId(profileId);
-    deleteFile(oldCompanyLogoId);
+    if (oldCompanyLogoId) deleteFile(oldCompanyLogoId);
 
     await changeCompanyLogoo(companyId, uploadResponse[0].id);
     const userCompany = await getCompany(profileId);

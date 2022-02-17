@@ -15,6 +15,7 @@ import React, { useState } from 'react';
 
 import { API_URL } from 'config/config.js';
 import { useAuthContext } from 'context/AuthContext.jsx';
+import { createCompany } from 'services/company';
 
 function CompanyInfo() {
   const { currentCompany, changeCompanyName, changeCompanyLogo } = useAuthContext();
@@ -32,15 +33,20 @@ function CompanyInfo() {
   const handleEditProfile = async (e) => {
     e.preventDefault();
 
-    await changeCompanyName(currentCompany.id, nameInput);
+    if (currentCompany.id) {
+      await changeCompanyName(currentCompany.id, nameInput);
 
-    if (companyLogo != API_URL + currentCompany?.imagePathURL) {
-      const uploadFileData = new FormData();
-      uploadFileData.append('files', companyLogoFile);
+      if (companyLogo != API_URL + currentCompany?.imagePathURL) {
+        const uploadFileData = new FormData();
+        uploadFileData.append('files', companyLogoFile);
 
-      await changeCompanyLogo(uploadFileData, currentCompany.id);
+        await changeCompanyLogo(uploadFileData, currentCompany.id);
+      } else {
+        console.log('profilna nije promenjena', companyLogo);
+      }
     } else {
-      console.log('profilna nije promenjena', companyLogo);
+      const newCompanyId = await createCompany(nameInput);
+      console.log('NEW COMPANY ID??', newCompanyId);
     }
 
     toast({
