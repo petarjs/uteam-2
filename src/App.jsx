@@ -17,6 +17,7 @@ import TopBar from './components/Layout/Topbar/TopBar.jsx';
 import ProtectedRoute from './components/protectedRoute/ProtectedRoute.jsx';
 
 import CreateQuestion from 'components/features/CreateQuestion/CreateQuestion';
+import Answers from 'components/Layout/Answers/Answers';
 import { useAuthContext } from 'context/AuthContext.jsx';
 
 function App() {
@@ -75,6 +76,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <CreateQuestion simplified />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/q&a"
+            element={
+              <ProtectedRoute>
+                <Answers />
               </ProtectedRoute>
             }
           />

@@ -41,10 +41,10 @@ export const AuthContextProvider = ({ children }) => {
     const userCompany = await getCompany(profileId);
     console.log('USERS compannuuuuuu:??', userCompany);
     const company = {};
-    company['id'] = userCompany.data[0].id;
-    company['name'] = userCompany.data[0].attributes.name;
-    company['imagePathURL'] = userCompany.data[0].attributes.logo.data.attributes.url;
-    company['imageName'] = userCompany.data[0].attributes.logo.data.attributes.name;
+    company['id'] = userCompany.data[0]?.id;
+    company['name'] = userCompany.data[0]?.attributes.name;
+    company['imagePathURL'] = userCompany.data[0]?.attributes.logo.data?.attributes.url;
+    company['imageName'] = userCompany.data[0]?.attributes.logo.data?.attributes.name;
     user['imagePathURL'] = userImage[0];
     user['imageName'] = userImage[1];
     setCurrentCompany(company);
