@@ -119,7 +119,19 @@ function CompanyInfo() {
               <FormHelperText>Change the company logo.</FormHelperText>
             </FormControl>
             {isEditing ? (
-              <Input size="lg" disabled={isNameError} type="submit" value="Save" cursor="pointer" />
+              <Input
+                size="lg"
+                disabled={isNameError}
+                type="submit"
+                value="Save"
+                cursor="pointer"
+                borderColor="green.400"
+                color="green.400"
+                _hover={{
+                  color: 'green.600',
+                  borderColor: 'green.600',
+                }}
+              />
             ) : (
               <FormControl>
                 <Input
