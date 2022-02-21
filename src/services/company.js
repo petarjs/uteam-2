@@ -70,11 +70,24 @@ export const changeCompanyLogoo = async (companyId, uploadFileId) => {
 
 export const addProfileToCompany = async (companyId, profileId) => {
   try {
+    const thisCompany = await getCompany(profileId);
+    const companyProfileIds = thisCompany.data[0].attributes.profiles.data.map(
+      (profile) => profile.id
+    );
     const response = await axiosInstance.put(`/api/companies/${companyId}`, {
       data: {
-        profiles: profileId,
+        profiles: [...companyProfileIds, profileId],
       },
     });
+    return response.data;
+  } catch (err) {
+    console.error(`${err.message}, 💥🤯`);
+  }
+};
+
+export const getCompanies = async () => {
+  try {
+    const response = await axiosInstance.get(`/api/companies`);
     return response.data;
   } catch (err) {
     console.error(`${err.message}, 💥🤯`);
