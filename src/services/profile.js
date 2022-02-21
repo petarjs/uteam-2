@@ -4,6 +4,7 @@ export const createProfile = async (companyId, uploadFileId, userId, username) =
   try {
     const response = await axiosInstance.post('/api/profiles', {
       data: {
+        status: 'pending',
         company: companyId,
         profilePhoto: uploadFileId,
         user: userId,
