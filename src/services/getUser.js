@@ -18,7 +18,6 @@ export const getProfileImage = async (userId) => {
     const response = await axiosInstance.get(
       `/api/profiles?filters[user][id][$eq]=${userId}&populate=profilePhoto`
     );
-    console.log('profile dataa', response.data, PROFILEIMAGEURLPATH);
     return [_.get(response.data, PROFILEIMAGEURLPATH), _.get(response.data, PROFILEIMAGENAME)];
   } catch (err) {
     console.error(`${err.message}, 💥🤯`);

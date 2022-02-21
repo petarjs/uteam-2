@@ -19,8 +19,6 @@ const Registration = () => {
     register,
     handleSubmit,
     formState: { errors },
-    // eslint-disable-next-line no-unused-vars
-    reset,
     trigger,
     watch,
   } = useForm();
@@ -62,7 +60,6 @@ const Registration = () => {
     <div className="register">
       <div className="register__content">
         <h2 className="register__title">uTeam - Register</h2>
-
         <form onSubmit={handleSubmit((data) => handleSubmitRegistration(data))}>
           <div className="register__field">
             <label className="register__label" htmlFor="name">
@@ -130,7 +127,6 @@ const Registration = () => {
             />
           </div>
           {errors.password && <p className="register__error-message">{errors.password.message}</p>}
-
           <div className="register__field">
             <label className="register__label" htmlFor="confirmPassword">
               Confirm Password:

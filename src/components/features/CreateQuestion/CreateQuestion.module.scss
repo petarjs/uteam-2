@@ -1,0 +1,116 @@
+@use '../../../utility-styles' as *;
+
+.question {
+  padding: 5rem 0 0 5rem;
+
+  &__heading {
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 4.4rem;
+  }
+
+  &__content {
+    width: 50%;
+    // FIXME: Buni se eslint kod breakpoints.scss.
+    // @include respond(desktop-sm-1) {
+    //   width: 70%;
+    // }
+  }
+
+  &__form {
+    display: inline-block;
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+    font-size: 1.4rem;
+  }
+
+  &__box {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &__input {
+    padding: 1.2rem 2.4rem;
+    border-radius: 1rem;
+    font-family: inherit;
+    font-size: 1.4rem;
+    color: var(--text-blue);
+  }
+
+  &__select {
+    display: flex;
+    width: 25rem;
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+
+    &::after {
+      content: '\25BC';
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 1em;
+      background-color: #34495e;
+      transition: 0.25s all ease;
+      pointer-events: none;
+    }
+
+    &:hover::after {
+      color: var(--button-blue-hover);
+    }
+
+    & select {
+      padding: 1.2rem 2.4rem 1.2rem 1.2rem;
+
+      flex: 1;
+      appearance: none;
+      color: var(--white-text);
+      background-color: var(--background-light);
+      cursor: pointer;
+
+      &::-ms-expand {
+        display: none;
+      }
+    }
+  }
+
+  &__btnBox {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__button {
+    @extend %btn;
+    padding: 1.2rem 2.4rem;
+    background-color: var(--button-blue);
+    font-size: 1.4rem;
+    color: var(--white-text);
+    border-radius: 1rem;
+
+    &:hover {
+      background-color: var(--button-blue-hover);
+    }
+  }
+
+  &__error {
+    color: var(--error);
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .question__content {
+    width: 80%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .question {
+    padding: 1.4rem 0 0 1.4rem;
+  }
+
+  .question__content {
+    width: 90%;
+  }
+}

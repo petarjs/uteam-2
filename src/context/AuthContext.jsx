@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { createContext, useCallback, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
-import { login, register } from 'services/auth';
+import { login, register } from 'services/auth.js';
 import { changeUserStats, resetPassword } from 'services/changeUser';
 import {
   createCompany,
@@ -60,7 +60,6 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   const handleRegister = async (data, uploadFileData) => {
-    //const userData = await register(data);
     console.log('DATAAAAAAAA:??? ', data, uploadFileData);
     let companyResponse;
     let companyId;
@@ -94,6 +93,7 @@ export const AuthContextProvider = ({ children }) => {
     setCurrentUser(null);
     setUserLoggedIn(false);
     localStorage.clear();
+    navigate('/');
   };
 
   const changeUsername = async (userId, newUsername) => {
@@ -162,8 +162,6 @@ export const AuthContextProvider = ({ children }) => {
     const loggedInUser = localStorage.getItem('userJwt');
     if (loggedInUser) {
       const foundUser = loggedInUser;
-      console.log('FOUND USER jwt!!!', { jwt: foundUser });
-      //setUserLoggedIn(true);
       loginUser({ jwt: foundUser });
     }
   }, [loginUser]);
