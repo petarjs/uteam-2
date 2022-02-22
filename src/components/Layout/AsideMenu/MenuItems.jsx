@@ -26,7 +26,7 @@ function MenuItems({ menuType }) {
     default:
       menuItems = [
         {
-          href: '/pending-approval',
+          href: '/pending',
           icon: MdOutlinePending,
           text: 'Pending for approval',
         },

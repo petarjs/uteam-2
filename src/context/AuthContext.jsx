@@ -34,7 +34,7 @@ export const AuthContextProvider = ({ children }) => {
   const loginUser = useCallback(async (userData) => {
     localStorage.setItem('userJwt', userData.jwt);
     setUserLoggedIn(true);
-    navigate('/pending-approval');
+    navigate('/pending');
     const user = await getUserStats();
     const userImage = await getProfileImage(user.id);
     const profileId = await getProfileId(user.id);

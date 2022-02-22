@@ -30,3 +30,21 @@ export const changeProfilePhoto = async (profileId, uploadFileId) => {
     console.error(`${err.message}, 💥🤯`);
   }
 };
+
+export const getProfiles = async () => {
+  try {
+    const response = await axiosInstance.get('/api/profiles?sort=createdAt:desc&populate=*');
+    return response.data;
+  } catch (e) {
+    console.log('error', e);
+  }
+};
+
+export const deleteProfile = async (profileId) => {
+  try {
+    const response = await axiosInstance.delete(`/api/profiles/${profileId}`);
+    return response.data;
+  } catch (e) {
+    console.log('error', e);
+  }
+};

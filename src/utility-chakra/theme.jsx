@@ -11,6 +11,9 @@ const breakpoints = createBreakpoints({
 });
 
 const theme = extendTheme({
+  shadows: {
+    purple: '0 0 0 3px rgba(159, 122, 234, 0.6)',
+  },
   colors: {
     color: {
       background: '#141d2f',
