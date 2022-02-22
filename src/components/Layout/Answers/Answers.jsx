@@ -1,61 +1,70 @@
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useState, useEffect } from 'react';
 
 import arrowDown from '../../../images/chevron-down-outline.svg';
 import arrowUp from '../../../images/chevron-up-outline.svg';
+import ModalUI from '../Modal/ModalUI';
 
 import classes from './Answers.module.scss';
+import AnswersForm from './AnswersForm';
+
+import usePagination from 'hooks/usePagination';
+import { getCompany } from 'services/company';
+import { getUserStats, getProfileId } from 'services/getUser';
+import { useGetQuestionsQuery } from 'services/questionApi';
 
 const Answers = () => {
+  const [profileId, setProfileId] = useState(0);
+  const [companyName, setCompanyName] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setFocus,
-  } = useForm();
+    data: { data: questions },
+  } = useGetQuestionsQuery();
 
   useEffect(() => {
-    setFocus('text');
-  }, [setFocus]);
+    const getProfileData = async () => {
+      try {
+        const userStats = await getUserStats();
+        const profileId = await getProfileId(userStats.id);
+        const company = await getCompany(profileId);
 
-  const handleAnswer = (data) => {
-    console.log(data);
-  };
+        setProfileId(profileId);
+        setCompanyName(company?.data[0]?.attributes?.name);
+      } catch (err) {
+        console.error(`${err.message},  💥🤯`);
+      }
+    };
+
+    getProfileData();
+  }, []);
+
+  const { firstContentIndex, lastContentIndex, nextPage, prevPage, page, totalPages } =
+    usePagination({
+      contentPerPage: 1,
+      count: questions?.length,
+    });
 
   return (
-    <main className={classes.answers}>
-      <h2 className={classes.answers__heading}>Quantox&apos;s team</h2>
-      <div className={classes.answers__content}>
-        <div className={classes.answers__arrows}>
-          <img src={arrowUp} alt="Arrow Up" />
-          <span>1/5</span>
-          <img src={arrowDown} alt="Arrow Down" />
-        </div>
-        <form
-          onSubmit={handleSubmit((data) => handleAnswer(data))}
-          className={classes.answers__form}
-        >
-          <div className={classes.answers__box}>
-            <label htmlFor="text" className={classes.answers__label}>
-              Do you have any pets?
-            </label>
-            <input
-              {...register('text', { required: 'Text is required' })}
-              placeholder="Answer text"
-              id="text"
-              className={classes.answers__input}
+    <>
+      <main className={classes.answers}>
+        <h2 className={classes.answers__heading}>{companyName}</h2>
+        {questions?.slice(firstContentIndex, lastContentIndex).map((question) => (
+          <div className={classes.answers__content} key={question.id}>
+            <div className={classes.answers__arrows}>
+              <img src={arrowUp} alt="Arrow Up" />
+              <span>
+                {page}/{totalPages}
+              </span>
+              <img src={arrowDown} alt="Arrow Down" />
+            </div>
+            <AnswersForm
+              data={{ question, profileId, page, totalPages, prevPage, nextPage, setIsModalOpen }}
             />
-            {errors.text && <p className={classes.answers__error}>{errors.text.message}</p>}
           </div>
-          <div className={classes.answers__box}>
-            {errors.type && <p className={classes.answers__error}>{errors.type.message}</p>}
-          </div>
-          <div className={classes.answers__btnBox}>
-            <button className={classes.answers__button}>Next</button>
-          </div>
-        </form>
-      </div>
-    </main>
+        ))}
+        {isModalOpen && <ModalUI onClose={setIsModalOpen} />}
+      </main>
+    </>
   );
 };
 

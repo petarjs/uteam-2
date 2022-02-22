@@ -1,0 +1,44 @@
+@use '../../../utility-styles' as *;
+
+.answers {
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+    font-size: 1.4rem;
+  }
+
+  &__box {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4rem;
+    margin-top: 3rem;
+  }
+
+  &__label {
+    font-size: 2rem;
+  }
+
+  &__btnBox {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__button {
+    @extend %btn;
+    padding: 1.2rem 2.4rem;
+    background-color: var(--button-blue);
+    font-size: 1.4rem;
+    color: var(--white-text);
+    border-radius: 1rem;
+    margin-left: 1rem;
+
+    &:hover {
+      background-color: var(--button-blue-hover);
+    }
+  }
+
+  &__error {
+    color: var(--error);
+  }
+}
