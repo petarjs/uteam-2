@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 
 import arrowDown from '../../../images/chevron-down-outline.svg';
 import arrowUp from '../../../images/chevron-up-outline.svg';
@@ -62,7 +63,11 @@ const Answers = () => {
             />
           </div>
         ))}
-        {isModalOpen && <ModalUI onClose={setIsModalOpen} />}
+        {isModalOpen &&
+          ReactDOM.createPortal(
+            <ModalUI onClose={setIsModalOpen} />,
+            document.getElementById('modal-root')
+          )}
       </main>
     </>
   );
