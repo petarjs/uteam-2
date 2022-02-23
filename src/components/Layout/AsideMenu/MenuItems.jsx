@@ -41,6 +41,11 @@ function MenuItems({ menuType }) {
           text: 'Questions',
         },
         {
+          href: '/q&a',
+          icon: RiQuestionnaireLine,
+          text: 'Q&A',
+        },
+        {
           href: '/company-info',
           icon: RiInformationLine,
           text: 'Company Info',
