@@ -12,7 +12,7 @@ import CompanyInfo from './components/Layout/CompanyInfo/CompanyInfo.jsx';
 import MainContent from './components/Layout/MainContent/MainContent.jsx';
 import MyProfile from './components/Layout/MyProfile/MyProfile.jsx';
 import Questions from './components/Layout/Questions/Questions.jsx';
-import Team from './components/Layout/Team/Team.jsx';
+import Teams from './components/Layout/Teams/Teams.jsx';
 import TopBar from './components/Layout/Topbar/TopBar.jsx';
 import ProtectedRoute from './components/protectedRoute/ProtectedRoute.jsx';
 
@@ -88,10 +88,10 @@ function App() {
             }
           />
           <Route
-            path="/team"
+            path="/teams"
             element={
               <ProtectedRoute>
-                <Team />
+                <Teams />
               </ProtectedRoute>
             }
           />

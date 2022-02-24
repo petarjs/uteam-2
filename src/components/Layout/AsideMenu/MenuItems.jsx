@@ -31,7 +31,7 @@ function MenuItems({ menuType }) {
           text: 'Pending for approval',
         },
         {
-          href: '/team',
+          href: '/teams',
           icon: AiOutlineTeam,
           text: 'Team',
         },
