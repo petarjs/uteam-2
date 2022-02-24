@@ -1,11 +1,20 @@
 import classes from './ProfileCard.module.scss';
 
-const ProfileCard = ({ profileName, profileImg, status, date }) => {
+import { API_URL } from 'config/config';
+import { useGetProfileImgQuery } from 'services/profileApi';
+
+const ProfileCard = ({ profileName, status, date, profileId, onDeleteProfile }) => {
+  const { data, isFetching } = useGetProfileImgQuery(profileId);
+
+  if (isFetching) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <li className={classes.profile}>
       <div className={classes.profile__card}>
         <div className={classes.profile__img}>
-          <img src={profileImg} alt={profileName} />
+          <img src={`${API_URL}${data.url}`} alt={profileName} />
         </div>
         <div className={classes.profile__container}>
           <div className={classes.profile__container_content}>
@@ -13,11 +22,14 @@ const ProfileCard = ({ profileName, profileImg, status, date }) => {
               <h4>{profileName}</h4>
               <p>Joined {date}</p>
             </div>
-            <p>{status}</p>
+            {/* <p>{status}</p> TODO: Za sada je null*/}
+            <p>{status}Published</p>
           </div>
           <div className={classes.profile__container_buttons}>
             <button className={classes.profile__container_buttons_edit}>Edit</button>
-            <button className={classes.profile__container_buttons_delete}>Delete</button>
+            <button className={classes.profile__container_buttons_delete} onClick={onDeleteProfile}>
+              Delete
+            </button>
           </div>
         </div>
       </div>

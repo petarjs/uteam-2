@@ -18,9 +18,8 @@ const Answers = () => {
   const [companyName, setCompanyName] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const {
-    data: { data: questions },
-  } = useGetQuestionsQuery();
+  const { data } = useGetQuestionsQuery();
+  const questions = data?.data;
 
   useEffect(() => {
     const getProfileData = async () => {

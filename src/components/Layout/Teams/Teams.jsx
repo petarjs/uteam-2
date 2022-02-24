@@ -1,30 +1,16 @@
 import ProfileCard from './ProfileCard';
 import classes from './Teams.module.scss';
 
+import { useDeleteProfileMutation, useGetProfilesQuery } from 'services/profileApi';
+import formatDate from 'utils/formatDate';
+
 const Team = () => {
-  const listOfTeams = [
-    {
-      name: 'Dan Abramov',
-      profileImg: 'https://bit.ly/dan-abramov',
-      status: 'Published',
-      date: '23rd 2021',
-      id: 113,
-    },
-    {
-      name: 'Mike Jones',
-      profileImg: 'https://bit.ly/dan-abramov',
-      status: 'Published',
-      date: '25rd 2021',
-      id: 555,
-    },
-    {
-      name: 'Dan Abramov',
-      profileImg: 'https://bit.ly/dan-abramov',
-      status: 'Published',
-      date: '23rd 2021',
-      id: 155,
-    },
-  ];
+  const { data } = useGetProfilesQuery();
+  const profiles = data?.data;
+
+  const [deleteProfile] = useDeleteProfileMutation();
+
+  console.log(profiles, '🚀🤘');
 
   return (
     <section className={classes.teams}>
@@ -34,13 +20,14 @@ const Team = () => {
       </nav>
       <main className={classes.teams__main}>
         <ul className={classes.teams__list}>
-          {listOfTeams.map((profile) => (
+          {profiles?.map((profile) => (
             <ProfileCard
-              profileName={profile.name}
-              profileImg={profile.profileImg}
-              status={profile.status}
-              date={profile.date}
+              profileName={profile.attributes.name}
+              status={profile.attributes.status}
+              date={formatDate(profile.attributes.createdAt)}
               key={profile.id}
+              profileId={profile.id}
+              onDeleteProfile={deleteProfile}
             />
           ))}
         </ul>
@@ -53,4 +40,4 @@ export default Team;
 
 // TODO: 1. Teams page, ProfileCard. ✔
 // TODO: 2. Styles. ✔
-// TODO: 3. ProfilesApi redux.
+// TODO: 3. ProfilesApi redux. ✔

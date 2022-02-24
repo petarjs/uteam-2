@@ -15,6 +15,10 @@ export const profileApi = createApi({
       query: (id) => `/profiles/${id}`,
       providesTags: ['profiles'],
     }),
+    getProfileImg: builder.query({
+      query: (id) => `/upload/files/${id}`,
+      providesTags: ['profiles'],
+    }),
     postProfile: builder.mutation({
       query: (data) => ({
         url: '/profiles',
@@ -41,6 +45,7 @@ export const profileApi = createApi({
 export const {
   useGetProfilesQuery,
   useGetProfileQuery,
+  useGetProfileImgQuery,
   usePostProfileMutation,
   useDeleteProfileMutation,
   useEditProfileMutation,
