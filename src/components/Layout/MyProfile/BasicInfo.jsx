@@ -10,32 +10,60 @@ import {
   Center,
   useToast,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+// eslint-disable-next-line no-unused-vars
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 
 import { API_URL } from 'config/config.js';
 import { useAuthContext } from 'context/AuthContext.jsx';
 
-function BasicInfo() {
-  const { currentUser, changeUsername, changeUserPhoto } = useAuthContext();
-  const [nameInput, setNameInput] = useState(currentUser?.username);
-  const [profilePhoto, setProfilePhoto] = useState(API_URL + currentUser?.imagePathURL);
+function BasicInfo({ currentUserProp }) {
+  let { currentUser, changeUsername, changeUserPhoto } = useAuthContext();
+  const [currentProfile, setCurrentProfile] = useState(currentUser);
+  console.log('pocinje basic infooo', currentUser, currentProfile);
+  const [nameInput, setNameInput] = useState(currentProfile?.username);
+  const [profilePhoto, setProfilePhoto] = useState(API_URL + currentProfile?.imagePathURL);
   const [profilePhotoFile, setProfilePhotoFile] = useState();
   const [isEditing, setIsEditing] = useState(false);
   const toast = useToast();
-
+  console.log('Ideee name input??', nameInput);
   const handleNameChange = (e) => setNameInput(e.target.value);
   const isNameError = nameInput === '';
+
+  useEffect(() => {
+    console.log(
+      'basic infoo?',
+      currentUserProp,
+      currentUser?.username,
+      API_URL + currentUser?.imagePathURL
+    );
+    if (currentUserProp?.id) {
+      console.log('........... ');
+      setNameInput(currentUserProp?.attributes.name);
+      setProfilePhoto(API_URL + currentUserProp?.attributes?.profilePhoto?.data?.attributes.url);
+      setCurrentProfile({
+        id: currentUserProp?.attributes.user.data?.id,
+        username: currentUserProp?.attributes.name,
+        imagePathURL: currentUserProp?.attributes.profilePhoto.data?.attributes.url,
+      });
+    }
+  }, [currentUserProp]);
 
   const handleEditProfile = async (e) => {
     e.preventDefault();
 
-    await changeUsername(currentUser.id, nameInput);
+    await changeUsername(currentProfile?.id, nameInput, false);
 
-    if (profilePhoto != API_URL + currentUser?.imagePathURL) {
+    console.log(
+      'SLIKAKAAA',
+      profilePhoto,
+      API_URL + currentProfile?.imagePathURL,
+      profilePhoto != API_URL + currentProfile?.imagePathURL
+    );
+    if (profilePhoto != API_URL + currentProfile?.imagePathURL) {
       const uploadFileData = new FormData();
       uploadFileData.append('files', profilePhotoFile);
 
-      await changeUserPhoto(uploadFileData, currentUser.id);
+      await changeUserPhoto(uploadFileData, currentProfile?.id);
     } else {
       console.log('profilna nije promenjena', profilePhoto);
     }
@@ -63,7 +91,7 @@ function BasicInfo() {
       reader.readAsDataURL(files[0]);
     } else {
       console.log('CANCEL clicked!', profilePhoto);
-      setProfilePhoto(API_URL + currentUser?.imagePathURL);
+      setProfilePhoto(API_URL + currentProfile?.imagePathURL);
     }
   };
 
@@ -111,7 +139,19 @@ function BasicInfo() {
           <FormHelperText>Change the profile photo.</FormHelperText>
         </FormControl>
         {isEditing ? (
-          <Input size="lg" disabled={isNameError} type="submit" value="Save" cursor="pointer" />
+          <Input
+            size="lg"
+            disabled={isNameError}
+            type="submit"
+            value="Save"
+            cursor="pointer"
+            borderColor="green.400"
+            color="green.400"
+            _hover={{
+              color: 'green.600',
+              borderColor: 'green.600',
+            }}
+          />
         ) : (
           <FormControl>
             <Input

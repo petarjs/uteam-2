@@ -39,7 +39,7 @@ function SideMenu() {
         </Menu>
       </VStack>
 
-      <VStack d={{ md: 'none' }} pos="fixed" top="100px" left="0" p="1.4rem">
+      <VStack zIndex={'100'} d={{ md: 'none' }} pos="fixed" top="100px" left="0" p="1.4rem">
         <Menu>
           <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
             Menu

@@ -13,7 +13,7 @@ import {
   changeCompanyLogoo,
 } from 'services/company';
 import { getUserStats, getProfileImage, getProfileId, getProfileImageId } from 'services/getUser';
-import { createProfile, changeProfilePhoto } from 'services/profile';
+import { createProfile, changeProfilePhoto, changeProfileName } from 'services/profile';
 import { uploadFile, deleteFile } from 'services/uploadFile';
 
 const AuthContext = createContext({
@@ -34,7 +34,7 @@ export const AuthContextProvider = ({ children }) => {
   const loginUser = useCallback(async (userData) => {
     localStorage.setItem('userJwt', userData.jwt);
     setUserLoggedIn(true);
-    navigate('/pending-approval');
+    navigate('/pending');
     const user = await getUserStats();
     const userImage = await getProfileImage(user.id);
     const profileId = await getProfileId(user.id);
@@ -96,8 +96,11 @@ export const AuthContextProvider = ({ children }) => {
     navigate('/');
   };
 
-  const changeUsername = async (userId, newUsername) => {
+  const changeUsername = async (userId, newUsername, isChaningCurrentUser = true) => {
     const newUserData = await changeUserStats(userId, newUsername);
+    const profileId = await getProfileId(userId);
+    await changeProfileName(profileId, newUsername);
+    if (!isChaningCurrentUser) return;
     const user = _.cloneDeep(currentUser);
     user['username'] = newUserData['username'];
     setCurrentUser(user);

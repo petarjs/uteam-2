@@ -6,6 +6,7 @@ import './App.scss';
 
 import Login from './components/features/Login/Login.jsx';
 import PendingApproval from './components/features/PendingApproval/PendingApproval.jsx';
+import PendingApprovalDetails from './components/features/PendingApproval/PendingApprovalDetails.jsx';
 import Register from './components/features/Register/Register.jsx';
 import AsideMenu from './components/Layout/AsideMenu/AsideMenu.jsx';
 import CompanyInfo from './components/Layout/CompanyInfo/CompanyInfo.jsx';
@@ -31,13 +32,16 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route
-            path="/pending-approval"
+            path="/pending"
             element={
               <ProtectedRoute>
                 <PendingApproval />
               </ProtectedRoute>
             }
           />
+          <Route path="/pending">
+            <Route path=":pendingId/*" element={<PendingApprovalDetails />} />
+          </Route>
           <Route
             path="/my-profile"
             element={
