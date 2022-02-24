@@ -51,6 +51,6 @@ const Team = () => {
 
 export default Team;
 
-// TODO: 1. Teams page, Profile. ✔
+// TODO: 1. Teams page, ProfileCard. ✔
 // TODO: 2. Styles. ✔
 // TODO: 3. ProfilesApi redux.
