@@ -4,7 +4,10 @@ import { API_URL } from 'config/config';
 import { useGetProfileImgQuery } from 'services/profileApi';
 
 const ProfileCard = ({ profileName, status, date, profileId, onDeleteProfile }) => {
-  const { data, isFetching } = useGetProfileImgQuery(profileId);
+  const { data, isFetching } = useGetProfileImgQuery(profileId); // FIXME:
+
+  console.log(profileId, 'ID IZ PROFILE CARD-a');
+  console.log(data, data?.url, 'DATA, i DATA>URL');
 
   if (isFetching) {
     return <p>Loading...</p>;
@@ -14,7 +17,7 @@ const ProfileCard = ({ profileName, status, date, profileId, onDeleteProfile }) 
     <li className={classes.profile}>
       <div className={classes.profile__card}>
         <div className={classes.profile__img}>
-          <img src={`${API_URL}${data.url}`} alt={profileName} />
+          <img src={`${API_URL}${data?.url}`} alt={profileName} />
         </div>
         <div className={classes.profile__container}>
           <div className={classes.profile__container_content}>

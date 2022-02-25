@@ -16,6 +16,7 @@ import Teams from './components/Layout/Teams/Teams.jsx';
 import TopBar from './components/Layout/Topbar/TopBar.jsx';
 import ProtectedRoute from './components/protectedRoute/ProtectedRoute.jsx';
 
+import AddNewTeamMember from 'components/features/AddNewTeamMember/AddNewTeamMember';
 import CreateQuestion from 'components/features/CreateQuestion/CreateQuestion';
 import Answers from 'components/Layout/Answers/Answers';
 import { useAuthContext } from 'context/AuthContext.jsx';
@@ -92,6 +93,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Teams />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/addNewTeamMember"
+            element={
+              <ProtectedRoute>
+                <AddNewTeamMember />
               </ProtectedRoute>
             }
           />

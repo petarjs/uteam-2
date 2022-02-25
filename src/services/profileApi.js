@@ -37,7 +37,7 @@ export const profileApi = createApi({
     }),
     deleteProfile: builder.mutation({
       query: (id) => ({ url: `/profiles/${id}`, method: 'DELETE' }),
-      invalidatesTags: ['qprofiles'],
+      invalidatesTags: ['profiles'],
     }),
   }),
 });

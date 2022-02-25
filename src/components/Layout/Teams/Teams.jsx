@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 import ProfileCard from './ProfileCard';
 import classes from './Teams.module.scss';
 
@@ -16,7 +18,9 @@ const Team = () => {
     <section className={classes.teams}>
       <nav className={classes.teams__nav}>
         <h2>Team</h2>
-        <button className={classes.teams__nav_button}>Add new team member</button>
+        <Link to={`/addNewTeamMember`}>
+          <button className={classes.teams__nav_button}>Add new team member</button>
+        </Link>
       </nav>
       <main className={classes.teams__main}>
         <ul className={classes.teams__list}>
@@ -27,7 +31,7 @@ const Team = () => {
               date={formatDate(profile.attributes.createdAt)}
               key={profile.id}
               profileId={profile.id}
-              onDeleteProfile={deleteProfile}
+              onDeleteProfile={() => deleteProfile(profile.id)}
             />
           ))}
         </ul>
@@ -41,3 +45,4 @@ export default Team;
 // TODO: 1. Teams page, ProfileCard. ✔
 // TODO: 2. Styles. ✔
 // TODO: 3. ProfilesApi redux. ✔
+// TODO: 4. AddNewTeamMember
