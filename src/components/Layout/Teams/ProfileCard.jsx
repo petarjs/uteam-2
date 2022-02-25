@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 import classes from './ProfileCard.module.scss';
 
 import { API_URL } from 'config/config';
@@ -26,7 +28,9 @@ const ProfileCard = ({ profileName, status, date, profileId, onDeleteProfile }) 
             <p>{status}Published</p>
           </div>
           <div className={classes.profile__container_buttons}>
-            <button className={classes.profile__container_buttons_edit}>Edit</button>
+            <button className={classes.profile__container_buttons_edit}>
+              <Link to={`/editTeamMember/${profileId}`}>Edit</Link>
+            </button>
             <button className={classes.profile__container_buttons_delete} onClick={onDeleteProfile}>
               Delete
             </button>

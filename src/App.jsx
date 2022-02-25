@@ -19,6 +19,7 @@ import ProtectedRoute from './components/protectedRoute/ProtectedRoute.jsx';
 import AddNewTeamMember from 'components/features/AddNewTeamMember/AddNewTeamMember';
 import CreateQuestion from 'components/features/CreateQuestion/CreateQuestion';
 import Answers from 'components/Layout/Answers/Answers';
+import EditTeamMember from 'components/Layout/Teams/EditTeamMember';
 import { useAuthContext } from 'context/AuthContext.jsx';
 
 function App() {
@@ -101,6 +102,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <AddNewTeamMember />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/editTeamMember/:memberId"
+            element={
+              <ProtectedRoute>
+                <EditTeamMember />
               </ProtectedRoute>
             }
           />
