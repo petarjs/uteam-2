@@ -1,10 +1,12 @@
 /* eslint-disable no-unused-vars */
 
 import { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import { useForm } from 'react-hook-form';
 
 import classes from './AddNewTeamMember.module.scss';
 
+import ModalUI from 'components/Layout/Modal/ModalUI';
 import { getCompany } from 'services/company';
 import { getProfileId, getUserStats } from 'services/getUser';
 import { usePostProfileMutation } from 'services/profileApi';
@@ -20,6 +22,7 @@ const AddNewTeamMember = () => {
   const [profileImg, setProfileImg] = useState('https://bit.ly/dan-abramov');
   const [postProfile] = usePostProfileMutation();
   const [ids, setIds] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     setFocus('name');
@@ -53,13 +56,12 @@ const AddNewTeamMember = () => {
     const profileData = {
       name: data.name,
       profilePhoto: uploadFileData,
-      // company: ids.companyId,
-      // user: ids.userId,
-      company: 40,
-      user: 57,
+      company: ids.companyId,
+      user: ids.userId,
     };
 
     postProfile(profileData);
+    setIsModalOpen(true);
   };
 
   const handleFileSelected = (e) => {
@@ -132,6 +134,11 @@ const AddNewTeamMember = () => {
           </div>
         </form>
       </div>
+      {isModalOpen &&
+        ReactDOM.createPortal(
+          <ModalUI onClose={setIsModalOpen} route={'/teams'} />,
+          document.getElementById('modal-root')
+        )}
     </section>
   );
 };

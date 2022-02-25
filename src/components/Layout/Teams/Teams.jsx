@@ -45,4 +45,5 @@ export default Team;
 // TODO: 1. Teams page, ProfileCard. ✔
 // TODO: 2. Styles. ✔
 // TODO: 3. ProfilesApi redux. ✔
-// TODO: 4. AddNewTeamMember
+// TODO: 4. AddNewTeamMember ✔
+// TODO: 5. EditProfile

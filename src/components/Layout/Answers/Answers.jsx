@@ -64,7 +64,7 @@ const Answers = () => {
         ))}
         {isModalOpen &&
           ReactDOM.createPortal(
-            <ModalUI onClose={setIsModalOpen} />,
+            <ModalUI onClose={setIsModalOpen} route={'/questions'} />,
             document.getElementById('modal-root')
           )}
       </main>
