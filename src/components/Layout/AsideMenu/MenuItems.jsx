@@ -31,7 +31,7 @@ function MenuItems({ menuType }) {
           text: 'Pending for approval',
         },
         {
-          href: '/team',
+          href: '/teams',
           icon: AiOutlineTeam,
           text: 'Team',
         },
@@ -39,6 +39,11 @@ function MenuItems({ menuType }) {
           href: '/questions',
           icon: RiQuestionnaireLine,
           text: 'Questions',
+        },
+        {
+          href: '/q&a',
+          icon: RiQuestionnaireLine,
+          text: 'Q&A',
         },
         {
           href: '/company-info',

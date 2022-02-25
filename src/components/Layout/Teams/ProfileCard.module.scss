@@ -1,0 +1,79 @@
+@use '../../../utility-styles' as *;
+
+.profile {
+  padding: 2.4rem;
+  border-radius: 1.5rem;
+  background-color: var(--background-light);
+  box-shadow: var(--shadow-bg-light);
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  &__img {
+    overflow: hidden;
+    border-top-right-radius: 0.6rem;
+    border-top-left-radius: 0.6rem;
+
+    & img {
+      width: 30rem;
+      height: 30rem;
+      object-fit: cover;
+    }
+  }
+
+  &__container {
+    &_content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.4rem;
+      margin-bottom: 2.8rem;
+
+      &_box {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        & > h4 {
+          font-weight: 700;
+        }
+      }
+
+      & > p {
+        padding: 0.4rem 0.8rem;
+        border-radius: 1.5rem;
+        background-color: green;
+      }
+    }
+
+    &_buttons {
+      display: flex;
+      justify-content: space-between;
+
+      & > button {
+        @extend %btn;
+        padding: 0.7rem 2.4rem;
+        background-color: #003d80;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--white-text);
+        border-radius: 1rem;
+      }
+
+      &_edit {
+        &:hover {
+          background-color: var(--button-blue-hover);
+        }
+      }
+
+      &_delete {
+        &:hover {
+          background-color: var(--error);
+        }
+      }
+    }
+  }
+}

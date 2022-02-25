@@ -1,0 +1,38 @@
+@use '../../../utility-styles' as *;
+
+.answers {
+  padding: 3.4rem 4.9rem 3.4rem 4.9rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4.4rem;
+
+  &__heading {
+    font-size: 2.8rem;
+    font-weight: 700;
+  }
+
+  &__arrows {
+    & img {
+      height: 3.2rem;
+    }
+
+    & span {
+      display: flex;
+      justify-content: center;
+      font-size: 2rem;
+    }
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 3.2rem;
+    padding: 3.2rem 2.4rem;
+    border: 1px solid #fff;
+  }
+
+  &__error {
+    color: var(--error);
+  }
+}

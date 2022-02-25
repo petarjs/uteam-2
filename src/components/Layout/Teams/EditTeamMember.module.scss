@@ -1,0 +1,63 @@
+@use '../../../utility-styles' as *;
+
+.editTeam {
+  display: flex;
+  flex-direction: column;
+  padding: 3.4rem 4rem 3.4rem 4.9rem;
+  gap: 5rem;
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    & > h2 {
+      font-size: 2.8rem;
+      font-weight: 700;
+    }
+
+    &_box {
+      display: flex;
+      align-items: center;
+      gap: 3.2rem;
+
+      & > div {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+
+        & > label {
+          font-size: 1.4rem;
+        }
+      }
+    }
+  }
+
+  &__select {
+    position: relative;
+    background-color: var(--background-blue);
+    width: 20rem;
+    padding: 1.4rem 2.4rem;
+    font-size: 1.6rem;
+    border-radius: 1rem;
+  }
+
+  &__button {
+    @extend %btn;
+    padding: 0.5rem 2rem;
+    background-color: var(--background-blue);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--white-text);
+    border-radius: 1rem;
+
+    &:hover {
+      background-color: var(--error);
+    }
+  }
+
+  &__main {
+    display: flex;
+    gap: 5rem;
+  }
+}

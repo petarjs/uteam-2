@@ -1,0 +1,45 @@
+@use '../../../utility-styles' as *;
+
+.teams {
+  padding: 3.4rem 4rem 3.4rem 4.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4.4rem;
+  height: 100vh;
+  overflow-y: scroll;
+
+  &__nav {
+    display: flex;
+    justify-content: space-between;
+
+    & > h2 {
+      font-size: 2.8rem;
+      font-weight: 700;
+    }
+
+    &_button {
+      @extend %btn;
+      padding: 0.7rem 2.4rem;
+      background-color: #003d80;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--white-text);
+      border-radius: 1rem;
+
+      &:hover {
+        background-color: var(--button-blue-hover);
+      }
+    }
+  }
+
+  // &__main {
+  // }
+
+  &__list {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 5rem;
+  }
+}

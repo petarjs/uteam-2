@@ -12,11 +12,14 @@ import CompanyInfo from './components/Layout/CompanyInfo/CompanyInfo.jsx';
 import MainContent from './components/Layout/MainContent/MainContent.jsx';
 import MyProfile from './components/Layout/MyProfile/MyProfile.jsx';
 import Questions from './components/Layout/Questions/Questions.jsx';
-import Team from './components/Layout/Team/Team.jsx';
+import Teams from './components/Layout/Teams/Teams.jsx';
 import TopBar from './components/Layout/Topbar/TopBar.jsx';
 import ProtectedRoute from './components/protectedRoute/ProtectedRoute.jsx';
 
+import AddNewTeamMember from 'components/features/AddNewTeamMember/AddNewTeamMember';
 import CreateQuestion from 'components/features/CreateQuestion/CreateQuestion';
+import Answers from 'components/Layout/Answers/Answers';
+import EditTeamMember from 'components/Layout/Teams/EditTeamMember';
 import { useAuthContext } from 'context/AuthContext.jsx';
 
 function App() {
@@ -79,10 +82,34 @@ function App() {
             }
           />
           <Route
-            path="/team"
+            path="/q&a"
             element={
               <ProtectedRoute>
-                <Team />
+                <Answers />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/teams"
+            element={
+              <ProtectedRoute>
+                <Teams />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/addNewTeamMember"
+            element={
+              <ProtectedRoute>
+                <AddNewTeamMember />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/editTeamMember/:memberId"
+            element={
+              <ProtectedRoute>
+                <EditTeamMember />
               </ProtectedRoute>
             }
           />
